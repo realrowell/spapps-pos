@@ -15,7 +15,7 @@ return new class extends Migration
             $table->string('id')->primary();
             $table->string('trans_ref')->unique();
             $table->string('trans_type');
-            $table->string('store_id');
+            $table->string('store_id')->nullable();
             $table->decimal('gross_amount', 15, 2);
             $table->decimal('discount_amount', 15, 2)->default(0);
             $table->decimal('tax_amount', 15, 2)->default(0);

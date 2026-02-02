@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('inv_logs', function (Blueprint $table) {
             $table->string('id')->primary();
-            $table->string('pr_id');
+            $table->string('pr_id')->nullable();
+            $table->string('pr_name');
             $table->decimal('qty_change', 10, 3);
             $table->string('loc_id')->nullable();
             $table->decimal('stock_br', 10, 3);
