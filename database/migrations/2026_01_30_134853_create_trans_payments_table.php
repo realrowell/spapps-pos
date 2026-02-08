@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('trans_payments', function (Blueprint $table) {
             $table->string('id')->primary();
+            $table->string('public_id')->unique();
             $table->string('trans_id');
             $table->string('payment_method');
             $table->string('mop_id')->nullable();

@@ -54,6 +54,50 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+         Schema::table('usr_module_checks', function (Blueprint $table) {
+            $table->dropForeign(['user_id']);
+        });
+
+        Schema::table('trans_notes', function (Blueprint $table) {
+            $table->dropForeign(['trans_id']);
+        });
+
+        Schema::table('trans_discounts', function (Blueprint $table) {
+            $table->dropForeign(['trans_id']);
+            $table->dropForeign(['disc_id']);
+        });
+
+        Schema::table('trans_items', function (Blueprint $table) {
+            $table->dropForeign(['trans_id']);
+            $table->dropForeign(['pr_id']);
+        });
+
+        Schema::table('transactions', function (Blueprint $table) {
+            $table->dropForeign(['store_id']);
+            $table->dropForeign(['user_id']);
+        });
+
+        Schema::table('trans_payments', function (Blueprint $table) {
+            $table->dropForeign(['trans_id']);
+            $table->dropForeign(['mop_id']);
+        });
+
+        Schema::table('inv_logs', function (Blueprint $table) {
+            $table->dropForeign(['pr_id']);
+        });
+
+        Schema::table('products', function (Blueprint $table) {
+            $table->dropForeign(['brand_id']);
+            $table->dropForeign(['cat_id']);
+        });
+
+        Schema::table('pr_prices', function (Blueprint $table) {
+            $table->dropForeign(['pr_id']);
+        });
+
+        Schema::table('pr_inventories', function (Blueprint $table) {
+            $table->dropForeign(['loc_id']);
+            $table->dropForeign(['pr_id']);
+        });
     }
 };
