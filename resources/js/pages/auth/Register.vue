@@ -34,10 +34,10 @@ import { store } from '@/routes/register';
                         autofocus
                         :tabindex="1"
                         autocomplete="name"
-                        name="name"
+                        name="username"
                         placeholder="Full name"
                     />
-                    <InputError :message="errors.name" />
+                    <InputError :message="errors.username" />
                 </div>
 
                 <div class="grid gap-2">
