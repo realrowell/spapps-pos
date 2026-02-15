@@ -42,44 +42,46 @@ function isActive(href?: string) {
     <SidebarMenu>
         <template v-for="item in items" :key="item.title">
 
-        <!-- Normal Item -->
-        <SidebarMenuItem v-if="!item.children">
-            <SidebarMenuButton
-                as-child
-                :is-active="isActive(typeof item.href === 'string' ? item.href : item.href?.url)"
-            >
-                <Link :href="item.href!">
-                <component :is="item.icon" class="w-4 h-4 mr-2" />
-                {{ item.title }}
-                </Link>
-            </SidebarMenuButton>
-        </SidebarMenuItem>
-
-        <!-- Item With Children -->
-        <SidebarMenuItem v-else>
-            <SidebarMenuButton
-                @click="toggle(item.title)"
-                :class="{ 'bg-muted': isChildActive(item.children) } "
-                class=" hover:cursor-pointer"
-            >
-                <component :is="item.icon" class="w-4 h-4 mr-2" />
-                {{ item.title }}
-            </SidebarMenuButton>
-
-            <div
-                v-if="openMenus.includes(item.title) || isChildActive(item.children)"
-                class="ml-6 mt-1 space-y-1"
-            >
-                <Link
-                v-for="child in item.children"
-                :key="child.title"
-                :href="child.href!"
-                :class="{ 'bg-muted': isActive(typeof child.href === 'string' ? child.href : child.href?.url) } "
-                class="block px-2 py-1 text-sm rounded-md hover:bg-muted"
+            <!-- Normal Item -->
+            <SidebarMenuItem v-if="!item.children">
+                <SidebarMenuButton
+                    as-child
+                    :is-active="isActive(typeof item.href === 'string' ? item.href : item.href?.url)"
+                    :class="{ 'bg-(--app-primary-color) text-white': isActive(typeof item.href === 'string' ? item.href : item.href?.url) } "
+                    class="hover:bg-(--app-primary-color) hover:text-white"
                 >
-                {{ child.title }}
-                </Link>
-            </div>
+                    <Link :href="item.href!">
+                        <component :is="item.icon" class="w-4 h-4 mr-2" />
+                        {{ item.title }}
+                    </Link>
+                </SidebarMenuButton>
+            </SidebarMenuItem>
+
+            <!-- Item With Children -->
+            <SidebarMenuItem v-else>
+                <SidebarMenuButton
+                    @click="toggle(item.title)"
+                    :class="{ 'bg-(--app-primary-color) text-white': isChildActive(item.children) } "
+                    class=" hover:cursor-pointer hover:bg-(--app-primary-color) hover:text-white"
+                >
+                    <component :is="item.icon" class="w-4 h-4 mr-2" />
+                    {{ item.title }}
+                </SidebarMenuButton>
+
+                <div
+                    v-if="openMenus.includes(item.title) || isChildActive(item.children)"
+                    class="ml-6 mt-1 space-y-1"
+                >
+                    <Link
+                    v-for="child in item.children"
+                    :key="child.title"
+                    :href="child.href!"
+                    :class="{ 'bg-(--app-primary-color) text-white': isActive(typeof child.href === 'string' ? child.href : child.href?.url) } "
+                    class="block px-2 py-1 text-sm rounded-md hover:bg-(--app-primary-color) hover:text-white"
+                    >
+                    {{ child.title }}
+                    </Link>
+                </div>
             </SidebarMenuItem>
 
         </template>
