@@ -20,7 +20,7 @@ class PrCategory extends Model
         self::creating(function ($model) {
             $prefix = 'prc'.date(format: 'ym');
             $model->id = IdGenerator::generate(['table' => 'pr_categories', 'length' => 20, 'prefix' => $prefix . str()->random(10)]);
-            $model->code = IdGenerator::generate(['table' => 'pr_categories', 'field' => 'cat_code', 'length' => 8, 'prefix' => str()->random(7)]);
+            $model->cat_code = IdGenerator::generate(['table' => 'pr_categories', 'field' => 'cat_code', 'length' => 8, 'prefix' => str()->random(7)]);
         });
     }
 }
