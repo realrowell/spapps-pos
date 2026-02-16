@@ -20,13 +20,14 @@ Route::get('inventory/categories', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('categories');
 
-Route::prefix('inventory')->middleware('auth')->controller(InventoryPageController::class)->name('inventory-')->group(function(){
-        Route::get('products','ProductsPage')->name('products');
-        Route::get('products/create','ProductCreatePage')->name('products-create');
-        Route::get('categories','CategoriesPage')->name('categories');
-        Route::get('categories/create','CategoryCreate')->name('categories-create');
+Route::prefix('inventory')->middleware('auth')->controller(InventoryPageController::class)->name('inventory-')->group(function () {
+    Route::get('products', 'ProductsPage')->name('products');
+    Route::get('products/create', 'ProductCreatePage')->name('products-create');
+    Route::get('categories', 'CategoriesPage')->name('categories');
+    Route::get('categories/create', 'CategoryCreate')->name('categories-create');
+    Route::get('brands', 'BrandsPage')->name('brands');
 });
 
-Route::prefix('inventory')->name('inventory-')->group(function(){
-        Route::post('categories/store',[CategoryManagementController::class, 'store'])->name('categories-store');
+Route::prefix('inventory')->name('inventory-')->group(function () {
+    Route::post('categories/store', [CategoryManagementController::class, 'store'])->name('categories-store');
 });

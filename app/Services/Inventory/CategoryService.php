@@ -15,6 +15,13 @@ class CategoryService extends \App\Services\BaseService
     {
         return PrCategory::all();
     }
+    /**
+     * Get all categories.
+     */
+    public function getAllActive(): Collection
+    {
+        return PrCategory::where('is_active', true)->get();
+    }
 
     /**
      * Get paginated categories.

@@ -10,9 +10,13 @@ use Inertia\Inertia;
 
 class CategoryManagementController extends Controller
 {
-    public function store(InventoryStoreCategoryRequest $request, CategoryService $service){
+    public function store(InventoryStoreCategoryRequest $request, CategoryService $service)
+    {
         $service->create($request->validated());
 
-        return Inertia::render('inventories/Categories')->with('success', 'Category created successfully.');
+        $data = [
+            'categories' => $service->getAll()
+        ];
+        return Inertia::render('inventories/Categories', $data)->with('success', 'Category created successfully.');
     }
 }
