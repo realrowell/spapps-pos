@@ -47,7 +47,7 @@ function isActive(href?: string) {
                 <SidebarMenuButton
                     as-child
                     :is-active="isActive(typeof item.href === 'string' ? item.href : item.href?.url)"
-                    :class="{ 'bg-(--app-primary-color) text-white': isActive(typeof item.href === 'string' ? item.href : item.href?.url) } "
+                    :class="{ 'bg-(--app-primary-color) text-white ': isActive(typeof item.href === 'string' ? item.href : item.href?.url) } "
                     class="hover:bg-(--app-primary-color) hover:text-white"
                 >
                     <Link :href="item.href!">

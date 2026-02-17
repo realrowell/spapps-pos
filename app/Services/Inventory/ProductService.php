@@ -1,12 +1,17 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Inventory;
 
+use App\Models\Location;
+use App\Models\PrBrand;
+use App\Models\PrCategory;
+use App\Models\PrInventory;
 use App\Models\Product;
+use App\Models\PrPrice;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 
-class ProductService extends BaseService
+class ProductService extends \App\Services\BaseService
 {
     /**
      * Get all products.
@@ -14,6 +19,30 @@ class ProductService extends BaseService
     public function getAll(): Collection
     {
         return Product::all();
+    }
+
+    /**
+     * Get stuses products.
+     */
+    public function getStatus(): array
+    {
+        return Product::statusOptions();
+    }
+
+    /**
+     * Get unit of measures products.
+     */
+    public function getUom(): array
+    {
+        return Product::uomOptions();
+    }
+
+    /**
+     * Get unit of measures products.
+     */
+    public function getPriceType(): array
+    {
+        return PrPrice::priceTypeOptions();
     }
 
     /**
@@ -43,8 +72,35 @@ class ProductService extends BaseService
 
             // Example business logic
             // $data['created_by'] = auth()->id();
+            $cat_id = PrCategory::select('id')->where('cat_code', $data['category'])->first();
+            $brand_id = PrBrand::select('id')->where('brand_code', $data['brand'])->first();
+            $loc_id = Location::select('id')->where('loc_code', $data['stock_location'])->first();
 
-            return Product::create($data);
+            $product = Product::create([
+                'pr_name' => $data['name'],
+                'pr_desc' => $data['description'],
+                'cat_id' => $cat_id->id,
+                'brand_id' => $brand_id->id,
+                'uom' => $data['uom'],
+                'status' => $data['status'],
+            ]);
+
+            $price = PrPrice::create([
+                'pr_id' => $product->id,
+                'price_type' => $data['price_type'],
+                'price' => $data['price'],
+                'is_active' => true,
+                'effective_from' => $data['price_effective_from'],
+                'effective_to' => $data['price_effective_to']
+            ]);
+
+            $inventory = PrInventory::create([
+                'pr_id' => $product->id,
+                'stock_qty' => $data['stock'],
+                'loc_id' => $loc_id->id
+            ]);
+
+            return $product;
         });
     }
 

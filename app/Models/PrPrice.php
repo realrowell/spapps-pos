@@ -28,11 +28,11 @@ class PrPrice extends Model
         self::creating(function ($model) {
             $prefix = 'prp'.date(format: 'ym');
             $model->id = IdGenerator::generate(['table' => 'pr_prices', 'length' => 20, 'prefix' => $prefix . str()->random(10)]);
-            $model->code = IdGenerator::generate(['table' => 'pr_prices', 'field' => 'pr_code', 'length' => 8, 'prefix' => str()->random(7)]);
+            $model->price_code = IdGenerator::generate(['table' => 'pr_prices', 'field' => 'price_code', 'length' => 8, 'prefix' => str()->random(7)]);
         });
     }
 
-    public static function discountTypeOptions(){
+    public static function priceTypeOptions(){
         return [
             self::TYPE_REGULAR => 'Regular',
             self::TYPE_WHOLESALE => 'Wholesale',

@@ -6,7 +6,6 @@ import type {
   SortingState,
   VisibilityState,
 } from '@tanstack/vue-table'
-import Badge from '@/components/ui/badge/Badge.vue'
 import {
   FlexRender,
   getCoreRowModel,
@@ -16,10 +15,11 @@ import {
   getSortedRowModel,
   useVueTable,
 } from '@tanstack/vue-table'
-import { computed } from "vue"
 import { createReusableTemplate } from '@vueuse/core'
 import { ArrowUpDown, ChevronDown, MoreHorizontal } from 'lucide-vue-next'
+import { computed } from "vue"
 import { h, ref } from 'vue'
+import Badge from '@/components/ui/badge/Badge.vue'
 
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'

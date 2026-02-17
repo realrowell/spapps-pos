@@ -47,10 +47,13 @@ const submit = () => {
             <div
                 class="relative min-h-screen flex-1 rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border pt-5 ps-5 pe-5"
             >
-                <form @submit.prevent="submit" class="flex flex-col justify-start align-center gap-5">
+                <form @submit.prevent="submit" class="flex flex-col justify-start align-center gap-5 md:items-start sm:items-stretch items-stretch">
                     <div class="flex flex-col justify-start align-center gap-3">
                         <Label for="Name">Category name</Label>
                         <Input id="Name" v-model="form.name" placeholder="Enter category name here.."></Input>
+                        <div v-if="form.errors.name" class="text-red-500 text-sm">
+                            {{ form.errors.name }}
+                        </div>
                     </div>
                     <Button type="submit">Create</Button>
                 </form>
