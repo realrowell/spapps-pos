@@ -13,7 +13,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { dashboard, inventory, products, categories } from '@/routes';
+import { dashboard, inventoryProducts, inventoryCategories, inventoryBrands, inventoryLocations } from '@/routes';
 import { type NavItem } from '@/types';
 import AppLogo from './AppLogo.vue';
 
@@ -30,12 +30,24 @@ const mainNavItems: NavItem[] = [
         children: [
             {
                 title: 'Products',
-                href: products(),
+                href: inventoryProducts(),
+            },
+            {
+                title: 'Brands',
+                href: inventoryBrands(),
             },
             {
                 title: 'Categories',
-                href: categories(),
+                href: inventoryCategories(),
             },
+            {
+                title: 'Locations',
+                href: inventoryLocations(),
+            },
+            // {
+            //     title: 'Inventory Logs',
+            //     href: inventory(),
+            // },
         ],
     },
 ];

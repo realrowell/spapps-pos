@@ -21,7 +21,7 @@ class Location extends Model
         self::creating(function ($model) {
             $prefix = 'loc';
             $model->id = IdGenerator::generate(['table' => 'locations', 'length' => 15, 'prefix' => $prefix . str()->random(10)]);
-            $model->code = IdGenerator::generate(['table' => 'locations', 'field' => 'loc_code', 'length' => 8, 'prefix' => str()->random(5)]);
+            $model->loc_code = IdGenerator::generate(['table' => 'locations', 'field' => 'loc_code', 'length' => 8, 'prefix' => str()->random(5)]);
         });
     }
 }

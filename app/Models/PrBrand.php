@@ -21,7 +21,7 @@ class PrBrand extends Model
         self::creating(function ($model) {
             $prefix = 'prb'.date(format: 'ym');
             $model->id = IdGenerator::generate(['table' => 'pr_brands', 'length' => 20, 'prefix' => $prefix . str()->random(10)]);
-            $model->code = IdGenerator::generate(['table' => 'pr_brands', 'field' => 'brand_code', 'length' => 8, 'prefix' => str()->random(7)]);
+            $model->brand_code = IdGenerator::generate(['table' => 'pr_brands', 'field' => 'brand_code', 'length' => 8, 'prefix' => str()->random(7)]);
         });
     }
 }

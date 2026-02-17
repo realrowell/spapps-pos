@@ -1,5 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 @import 'tailwindcss';
-
 @import 'tw-animate-css';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
@@ -124,6 +124,24 @@
     --sidebar-border: hsl(0 0% 91%);
     --sidebar-ring: hsl(217.2 91.2% 59.8%);
     --sidebar: hsl(0 0% 98%);
+    --app-primary-color: #008CFF;
+    --app-subtle-primary-color: #DEF2FF;
+    --app-dark-primary-color: #0169BE;
+    --app-danger-color: #FC3232;
+    --app-subtle-danger-color: #FFD8DD;
+    --app-dark-danger-color: #AF0202;
+    --app-success-color: #04956D;
+    --app-subtle-success-color: #B9FFEC;
+    --app-dark-success-color: #026D4F;
+    --app-warning-color: #FF8800;
+    --app-subtle-warning-color: #FFE9AE;
+    --app-dark-warning-color: #D65600;
+    --app-info-color: #00C2FF;
+    --app-subtle-info-color: #D6F7FF;
+    --app-dark-info-color: #068FB9;
+    --app-secondary-color: #F3F3F3;
+    --app-subtle-secondary-color: #5B5B5B;
+    --app-dark-secondary-color: #D6D6D6;
 }
 
 .dark {
@@ -169,4 +187,7 @@
     body {
         @apply bg-background text-foreground;
     }
+}
+body {
+    font-family: 'Poppins';
 }

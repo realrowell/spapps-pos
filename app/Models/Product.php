@@ -45,12 +45,10 @@ class Product extends Model
             $prefix = 'pr'.date(format: 'ym');
             $model->id = IdGenerator::generate(['table' => 'products', 'length' => 30, 'prefix' => $prefix . str()->random(20)]);
 
-            static::creating(function ($model) {
-                if (empty($model->pr_code)) {
-                    $uuid = Str::uuid();
-                    $model->pr_code = hash('sha256', $uuid);
-                }
-            });
+            if (empty($model->pr_code)) {
+                $uuid = Str::uuid();
+                $model->pr_code = hash('sha256', $uuid);
+            }
         });
     }
 
