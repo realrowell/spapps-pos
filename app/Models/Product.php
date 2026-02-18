@@ -76,4 +76,24 @@ class Product extends Model
             self::STATUS_ARCHIVED => 'Archived',
         ];
     }
+
+    public function categories(){
+        return $this->hasOne(PrCategory::class, 'id', 'cat_id');
+    }
+
+    public function brands(){
+        return $this->hasOne(PrBrand::class, 'id', 'brand_id');
+    }
+
+    public function prices(){
+        return $this->hasMany(PrPrice::class, 'pr_id', 'id');
+    }
+
+    public function invLogs(){
+        return $this->hasMany(InvLog::class, 'pr_id', 'id');
+    }
+
+    public function prInventories(){
+        return $this->hasMany(PrInventory::class, 'pr_id', 'id');
+    }
 }

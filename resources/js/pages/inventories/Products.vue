@@ -5,6 +5,8 @@ import Button from '@/components/ui/button/Button.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { inventoryProducts, inventoryProductsCreate } from '@/routes';
 import { type BreadcrumbItem } from '@/types';
+import ProductTable from './partials/ProductTable.vue';
+import type { Product } from '@/types/product'
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -12,6 +14,12 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: inventoryProducts().url,
     },
 ];
+
+const { products } = defineProps<{
+    products: Product[]
+}>()
+
+console.log(products)
 </script>
 
 <template>
@@ -29,6 +37,7 @@ const breadcrumbs: BreadcrumbItem[] = [
             <div
                 class="relative min-h-screen flex-1 rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border"
             >
+                <ProductTable :data="products"/>
             </div>
         </div>
     </AppLayout>
