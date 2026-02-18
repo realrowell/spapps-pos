@@ -42,13 +42,14 @@ const form = useForm({
     thumbnail: null as File | null,
     uom: null,
     status: 'draft',
-    price_type: '',
+    price_type: 'retail',
     price: null as number | null,
     stock: null as number | null,
     price_effective_from: '',
     price_effective_to: '',
     stock_location: null,
 })
+
 
 const onSubmit = () => {
     form.post(inventoryProductsStore().url)
@@ -250,7 +251,6 @@ function clearSelect(path: string) {
                                 </div>
                             </div>
                             <div class="flex flex-col gap-3">
-                                <!-- <Input class="w-50" id="price" v-model="form.price" /> -->
                                 <Label for="price">Price</Label>
                                 <NumberField
                                     v-model="form.price"
