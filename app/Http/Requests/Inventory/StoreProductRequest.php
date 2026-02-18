@@ -33,7 +33,7 @@ class StoreProductRequest extends FormRequest
             'price' => 'required|numeric|min:0',
             'price_effective_from' => 'nullable|date',
             'price_effective_to' => 'nullable|date|after_or_equal:price_effective_from',
-            'stock' => 'required|integer|min:0',
+            'stock' => 'nullable|integer|min:0',
             'stock_location' => 'nullable',
         ];
     }

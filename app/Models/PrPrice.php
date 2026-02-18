@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class PrPrice extends Model
 {
-    public const TYPE_REGULAR = 'regular';
+    public const TYPE_RETAIL = 'retail';
     public const TYPE_WHOLESALE = 'wholesale';
     public const TYPE_PROMO = 'promo';
 
@@ -34,7 +34,7 @@ class PrPrice extends Model
 
     public static function priceTypeOptions(){
         return [
-            self::TYPE_REGULAR => 'Regular',
+            self::TYPE_RETAIL => 'Retail',
             self::TYPE_WHOLESALE => 'Wholesale',
             self::TYPE_PROMO => 'Promo',
         ];

@@ -41,7 +41,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import type { Product } from '@/types/product'
+import type { Product } from '@/types/inventories/product'
 
 function valueUpdater<T>(updaterOrValue: T | ((prev: T) => T), ref: { value: T }): void {
   ref.value = typeof updaterOrValue === 'function' ? (updaterOrValue as (prev: T) => T)(ref.value) : updaterOrValue
@@ -83,12 +83,24 @@ const statusMap: Record<string, { variant: any; label: string }> = {
 }
 
 function formatPrice(value: number | string | null): string {
-    if (value === null || value === undefined) return ''
+    // check null, undefined, or empty string
+    if (value === null || value === undefined || value === '') {
+        return 'Not Available'
+    }
+
+    const numberValue = Number(value)
+
+    // check if conversion failed (NaN)
+    if (isNaN(numberValue)) {
+        return 'Not Available'
+    }
 
     return new Intl.NumberFormat('en-PH', {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
-    }).format(Number(value))
+        // style: 'currency',
+        // currency: 'PHP',
+    }).format(numberValue)
 }
 
 const columns: ColumnDef<Product>[] = [
@@ -166,7 +178,7 @@ const columns: ColumnDef<Product>[] = [
         }
     },
     {
-        accessorKey: 'prInventories',
+        accessorKey: 'pr_inventories',
         header: ({ column }) => {
             return h(Button, {
                 variant: 'ghost',
@@ -175,11 +187,18 @@ const columns: ColumnDef<Product>[] = [
         },
         cell: ({ row }) => {
             const pr_inventories = row.original.pr_inventories
-
+            // check if null, undefined, or empty
+            if (!pr_inventories || pr_inventories.length === 0) {
+                return h(
+                    'div',
+                    { class: 'text-sm text-muted-foreground' },
+                    'Not Available'
+                )
+            }
             return h(
                 'div',
                 pr_inventories.map(i =>
-                    h('div', { class: 'text-sm' }, ` ${formatPrice(i.stock_qty)}`)
+                    h('div', { class: 'text-sm' }, ` ${formatPrice(i.stock_qty) }`)
                 )
             )
         }

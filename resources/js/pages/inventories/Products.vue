@@ -5,8 +5,8 @@ import Button from '@/components/ui/button/Button.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { inventoryProducts, inventoryProductsCreate } from '@/routes';
 import { type BreadcrumbItem } from '@/types';
+import type { Product } from '@/types/inventories/product'
 import ProductTable from './partials/ProductTable.vue';
-import type { Product } from '@/types/product'
 
 const breadcrumbs: BreadcrumbItem[] = [
     {

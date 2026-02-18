@@ -94,11 +94,13 @@ class ProductService extends \App\Services\BaseService
                 'effective_to' => $data['price_effective_to']
             ]);
 
-            $inventory = PrInventory::create([
-                'pr_id' => $product->id,
-                'stock_qty' => $data['stock'],
-                'loc_id' => $loc_id->id
-            ]);
+            if($data['stock'] && $loc_id->id){
+                $inventory = PrInventory::create([
+                    'pr_id' => $product->id,
+                    'stock_qty' => $data['stock'],
+                    'loc_id' => $loc_id->id
+                ]);
+            }
 
             return $product;
         });
