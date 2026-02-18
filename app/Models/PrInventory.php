@@ -23,4 +23,8 @@ class PrInventory extends Model
             $model->id = IdGenerator::generate(['table' => 'pr_inventories', 'length' => 20, 'prefix' => $prefix . str()->random(13)]);
         });
     }
+
+    public function locations(){
+        return $this->hasOne(Location::class, 'id', 'loc_id');
+    }
 }
