@@ -29,7 +29,7 @@ class InventoryPageController extends Controller
     public function ProductsPage()
     {
         $data = [
-            'brands' => $this->prService->getAll()
+            'products' => $this->prService->getAll()
         ];
         return Inertia::render('inventories/Products',$data);
     }

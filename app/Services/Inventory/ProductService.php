@@ -18,7 +18,7 @@ class ProductService extends \App\Services\BaseService
      */
     public function getAll(): Collection
     {
-        return Product::all();
+        return Product::with(['categories', 'brands', 'prices', 'prInventories.locations'])->get();
     }
 
     /**
