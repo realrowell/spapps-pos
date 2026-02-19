@@ -41,7 +41,7 @@ const onSubmit = () => {
                 <h2 class="text-2xl">Create Location</h2>
             </div>
             <div
-                class="relative min-h-screen flex-1 rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border pt-5 ps-5 pe-5"
+                class="relative min-h-screen flex-1 rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border pt-5 ps-5 pe-5 bg-card"
             >
                 <form @submit.prevent="onSubmit" class="flex flex-col gap-5 md:items-start sm:items-stretch items-stretch">
                     <div class="flex flex-col gap-5">

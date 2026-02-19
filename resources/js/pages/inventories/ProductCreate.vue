@@ -96,7 +96,7 @@ function clearSelect(path: string) {
                 <h2 class="text-2xl">Create Product</h2>
             </div>
             <form @submit.prevent="onSubmit" class="flex flex-col gap-10 ">
-                <div class="relative rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border p-5">
+                <div class="relative rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border p-5 bg-card">
                     <div class="flex flex-col gap-8">
                         <h2 class="text-xl">Product Details</h2>
                         <div class="flex flex-col gap-3">
@@ -221,7 +221,7 @@ function clearSelect(path: string) {
                         </div>
                     </div>
                 </div>
-                <div class="relative rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border p-5">
+                <div class="relative rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border p-5 bg-card">
                     <div class="flex flex-col gap-8">
                         <h2 class="text-xl">Pricing & Stock</h2>
                         <div class="flex flex-col md:flex-row sm:flex-col gap-5">
