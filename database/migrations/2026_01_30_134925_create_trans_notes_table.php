@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('trans_notes', function (Blueprint $table) {
-            $table->string('id')->primary();
-            $table->string('trans_id');
+            $table->id();
+            $table->unsignedBigInteger('trans_id')->index();
             $table->string('note_type');
             $table->text('note');
             $table->string('created_by');

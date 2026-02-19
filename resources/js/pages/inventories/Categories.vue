@@ -37,7 +37,7 @@ const { categories } = defineProps<{
                 </Link>
             </div>
             <div
-                class="relative min-h-screen flex-1 rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border"
+                class="relative min-h-screen flex-1 rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border bg-card"
             >
                 <CategoryTable :data="categories"/>
             </div>

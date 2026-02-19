@@ -36,14 +36,14 @@ class Product extends Model
         'is_track_inventory'
     ];
 
-    public $incrementing = false;
+    // public $incrementing = false;
 
     public static function boot()
     {
         parent::boot();
         self::creating(function ($model) {
-            $prefix = 'pr'.date(format: 'ym');
-            $model->id = IdGenerator::generate(['table' => 'products', 'length' => 30, 'prefix' => $prefix . str()->random(20)]);
+            // $prefix = 'pr'.date(format: 'ym');
+            // $model->id = IdGenerator::generate(['table' => 'products', 'length' => 30, 'prefix' => $prefix . str()->random(20)]);
 
             if (empty($model->pr_code)) {
                 $uuid = Str::uuid();
@@ -52,7 +52,8 @@ class Product extends Model
         });
     }
 
-    public static function uomOptions(){
+    public static function uomOptions()
+    {
         return [
             self::UOM_PCS => 'Pieces',
             self::UOM_KG => 'Kilograms',
@@ -67,7 +68,8 @@ class Product extends Model
         ];
     }
 
-    public static function statusOptions(){
+    public static function statusOptions()
+    {
         return [
             self::STATUS_ACTIVE => 'Active',
             self::STATUS_INACTIVE => 'Inactive',
@@ -77,23 +79,28 @@ class Product extends Model
         ];
     }
 
-    public function categories(){
+    public function categories()
+    {
         return $this->hasOne(PrCategory::class, 'id', 'cat_id');
     }
 
-    public function brands(){
+    public function brands()
+    {
         return $this->hasOne(PrBrand::class, 'id', 'brand_id');
     }
 
-    public function prices(){
+    public function prices()
+    {
         return $this->hasMany(PrPrice::class, 'pr_id', 'id');
     }
 
-    public function invLogs(){
+    public function invLogs()
+    {
         return $this->hasMany(InvLog::class, 'pr_id', 'id');
     }
 
-    public function prInventories(){
+    public function prInventories()
+    {
         return $this->hasMany(PrInventory::class, 'pr_id', 'id');
     }
 }

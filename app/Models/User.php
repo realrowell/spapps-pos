@@ -35,7 +35,7 @@ class User extends Authenticatable
         'password',
         'usr_desc',
         'role',
-        'status_id',
+        'status',
         'full_name',
         'profile_photo_path'
     ];
@@ -51,7 +51,6 @@ class User extends Authenticatable
         'two_factor_recovery_codes',
         'remember_token',
     ];
-    public $incrementing = false;
 
     /**
      * Get the attributes that should be cast.
@@ -70,10 +69,6 @@ class User extends Authenticatable
     public static function boot()
     {
         parent::boot();
-        self::creating(function ($model) {
-            $prefix = 'usr'.date(format: 'ym');
-            $model->id = IdGenerator::generate(['table' => 'users', 'length' => 20, 'prefix' => $prefix . str()->random(10)]);
-        });
         static::creating(function ($model) {
             if (empty($model->public_id)) {
                 $model->public_id = hash('sha256', Str::uuid());
@@ -81,13 +76,15 @@ class User extends Authenticatable
         });
     }
 
-    public static function roleOptions(){
+    public static function roleOptions()
+    {
         return [
             self::ROLE_ADMIN => 'Admin',
             self::ROLE_USER => 'User',
         ];
     }
-    public static function statusOptions(){
+    public static function statusOptions()
+    {
         return [
             self::STATUS_ACTIVE => 'Active',
             self::STATUS_INACTIVE => 'Inactive',

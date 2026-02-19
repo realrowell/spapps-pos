@@ -20,19 +20,20 @@ class PrPrice extends Model
         'effective_to'
     ];
 
-    public $incrementing = false;
+    // public $incrementing = false;
 
     public static function boot()
     {
         parent::boot();
         self::creating(function ($model) {
-            $prefix = 'prp'.date(format: 'ym');
-            $model->id = IdGenerator::generate(['table' => 'pr_prices', 'length' => 20, 'prefix' => $prefix . str()->random(10)]);
-            $model->price_code = IdGenerator::generate(['table' => 'pr_prices', 'field' => 'price_code', 'length' => 8, 'prefix' => str()->random(7)]);
+            // $prefix = 'prp'.date(format: 'ym');
+            // $model->id = IdGenerator::generate(['table' => 'pr_prices', 'length' => 20, 'prefix' => $prefix . str()->random(10)]);
+            $model->price_code = IdGenerator::generate(['table' => 'pr_prices', 'field' => 'price_code', 'length' => 10, 'prefix' => str()->random(9)]);
         });
     }
 
-    public static function priceTypeOptions(){
+    public static function priceTypeOptions()
+    {
         return [
             self::TYPE_RETAIL => 'Retail',
             self::TYPE_WHOLESALE => 'Wholesale',

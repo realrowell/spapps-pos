@@ -27,25 +27,27 @@ class Transaction extends Model
         'completed_at'
     ];
 
-    public $incrementing = false;
+    // public $incrementing = false;
 
     public static function boot()
     {
         parent::boot();
         self::creating(function ($model) {
-            $prefix = 'tra'.date(format: 'ym');
-            $model->id = IdGenerator::generate(['table' => 'transactions', 'length' => 30, 'prefix' => $prefix . str()->random(20)]);
-            $model->code = IdGenerator::generate(['table' => 'transactions', 'field' => 'trans_ref', 'length' => 10, 'prefix' => str()->random(8)]);
+            // $prefix = 'tra'.date(format: 'ym');
+            // $model->id = IdGenerator::generate(['table' => 'transactions', 'length' => 30, 'prefix' => $prefix . str()->random(20)]);
+            $model->trans_ref = IdGenerator::generate(['table' => 'transactions', 'field' => 'trans_ref', 'length' => 10, 'prefix' => str()->random(8)]);
         });
     }
 
-    public static function typeOptions(){
+    public static function typeOptions()
+    {
         return [
             self::TYPE_SALE => 'Sale',
             self::TYPE_REFUND => 'Refund'
         ];
     }
-    public static function statusOptions(){
+    public static function statusOptions()
+    {
         return [
             self::STATUS_PENDING => [
                 'status' => 'Pend',

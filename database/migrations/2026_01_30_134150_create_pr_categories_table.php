@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('pr_categories', function (Blueprint $table) {
-            $table->string('id')->primary();
+            $table->id();
             $table->string('cat_code')->unique();
             $table->string('cat_name');
             $table->boolean('is_active')->default(true);

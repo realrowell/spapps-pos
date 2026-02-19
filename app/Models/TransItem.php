@@ -17,14 +17,14 @@ class TransItem extends Model
         'line_total'
     ];
 
-    public $incrementing = false;
+    // public $incrementing = false;
 
     public static function boot()
     {
         parent::boot();
         self::creating(function ($model) {
-            $prefix = 'trp'.date(format: 'ym');
-            $model->id = IdGenerator::generate(['table' => 'trans_items', 'length' => 30, 'prefix' => $prefix . str()->random(20)]);
+            // $prefix = 'trp'.date(format: 'ym');
+            // $model->id = IdGenerator::generate(['table' => 'trans_items', 'length' => 30, 'prefix' => $prefix . str()->random(20)]);
         });
     }
 }

@@ -12,12 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('trans_items', function (Blueprint $table) {
-            $table->string('id')->primary();
-            $table->string('trans_id');
-            $table->string('pr_id')->nullable();
+            $table->id();
+            $table->unsignedBigInteger('trans_id')->index();
+            $table->unsignedBigInteger('pr_id')->nullable()->index();
             $table->string('pr_name');
             $table->string('uom');
             $table->string('qty');
+            $table->string('price_type');
             $table->decimal('pr_price', 12, 2);
             $table->decimal('line_total', 12, 2);
             $table->timestamps();

@@ -16,19 +16,20 @@ class UsrModuleCheck extends Model
         'sys_module'
     ];
 
-    public $incrementing = false;
+    // public $incrementing = false;
 
     public static function boot()
     {
         parent::boot();
         self::creating(function ($model) {
-            $prefix = 'umc'.date(format: 'ym');
-            $model->id = IdGenerator::generate(['table' => 'usr_module_checks', 'length' => 20, 'prefix' => $prefix . str()->random(10)]);
+            // $prefix = 'umc'.date(format: 'ym');
+            // $model->id = IdGenerator::generate(['table' => 'usr_module_checks', 'length' => 20, 'prefix' => $prefix . str()->random(10)]);
         });
     }
 
-    public static function moduleOptions(){
-        return[
+    public static function moduleOptions()
+    {
+        return [
             self::MODULE_SALES => 'Sales',
             self::MODULE_PURCHASE => 'Purchase',
             self::MODULE_USER_MGMT => 'User Management',

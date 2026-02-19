@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('pr_brands', function (Blueprint $table) {
-            $table->string('id')->primary();
+            $table->id();
             $table->string('brand_code')->unique();
             $table->string('brand_name');
             $table->string('brand_desc')->nullable();

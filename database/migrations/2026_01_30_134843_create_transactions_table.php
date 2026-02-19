@@ -12,17 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('transactions', function (Blueprint $table) {
-            $table->string('id')->primary();
+            $table->id();
             $table->string('trans_ref')->unique();
             $table->string('trans_type');
-            $table->string('store_id')->nullable();
+            $table->unsignedBigInteger('store_id')->nullable()->index();
             $table->decimal('gross_amount', 15, 2);
             $table->decimal('discount_amount', 15, 2)->default(0);
             $table->decimal('tax_amount', 15, 2)->default(0);
             $table->decimal('net_amount', 15, 2);
             $table->string('status');
             $table->string('transacted_by');
-            $table->string('user_id')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable()->index();
             $table->dateTime('completed_at')->nullable();
             $table->timestamps();
         });
