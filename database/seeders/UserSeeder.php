@@ -17,11 +17,13 @@ class UserSeeder extends Seeder
         User::updateOrCreate(
             ['email' => 'admin@example.com'],
             [
-                'username' => 'admin',
+                'username' => 'demo.1',
                 'email' => 'demo.1@mail.com',
-                'full_name' => 'Admin User',
+                'full_name' => 'Demo Admin User',
                 'password' => Hash::make('05052000'), // ✅ hashed
                 'email_verified_at' => now(), // optional but recommended
+                'role' => 'admin',
+                'status' => 'active'
             ]
         );
     }

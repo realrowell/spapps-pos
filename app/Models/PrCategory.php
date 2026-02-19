@@ -12,14 +12,14 @@ class PrCategory extends Model
         'is_active'
     ];
 
-    public $incrementing = false;
+    // public $incrementing = false;
 
     public static function boot()
     {
         parent::boot();
         self::creating(function ($model) {
-            $prefix = 'prc'.date(format: 'ym');
-            $model->id = IdGenerator::generate(['table' => 'pr_categories', 'length' => 20, 'prefix' => $prefix . str()->random(10)]);
+            // $prefix = 'prc'.date(format: 'ym');
+            // $model->id = IdGenerator::generate(['table' => 'pr_categories', 'length' => 20, 'prefix' => $prefix . str()->random(10)]);
             $model->cat_code = IdGenerator::generate(['table' => 'pr_categories', 'field' => 'cat_code', 'length' => 8, 'prefix' => str()->random(7)]);
         });
     }

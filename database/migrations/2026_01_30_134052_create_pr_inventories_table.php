@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('pr_inventories', function (Blueprint $table) {
-            $table->string('id')->primary();
-            $table->string('pr_id')->index();
+            $table->id();
+            $table->unsignedBigInteger('pr_id')->index();
             $table->decimal('stock_qty', 10, 3)->default(0);
-            $table->string('loc_id')->nullable();
+            $table->unsignedBigInteger('loc_id')->nullable();
             $table->timestamps();
         });
     }

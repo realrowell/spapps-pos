@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('usr_module_checks', function (Blueprint $table) {
-            $table->string('id')->primary();
-            $table->string('user_id');
+            $table->id();
+            $table->unsignedBigInteger('user_id')->index();
             $table->string('sys_module')->nullable();
             $table->timestamps();
         });

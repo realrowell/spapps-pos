@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('trans_discounts', function (Blueprint $table) {
-            $table->string('id')->primary();
-            $table->string('trans_id');
-            $table->string('disc_id')->nullable();
+            $table->id();
+            $table->unsignedBigInteger('trans_id')->index();
+            $table->unsignedBigInteger('disc_id')->nullable()->index();
             $table->decimal('amount', 15, 2)->default(0);
             $table->string('description');
             $table->timestamps();

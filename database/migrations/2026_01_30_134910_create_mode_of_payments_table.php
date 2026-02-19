@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('mode_of_payments', function (Blueprint $table) {
-            $table->string('id')->primary();
+            $table->id();
             $table->string('mop_code')->unique();
             $table->string('mop_type');
             $table->string('mop_name');

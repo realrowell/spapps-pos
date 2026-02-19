@@ -12,15 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('trans_payments', function (Blueprint $table) {
-            $table->string('id')->primary();
+            $table->id();
             $table->string('public_id')->unique();
-            $table->string('trans_id');
+            $table->unsignedBigInteger('trans_id')->index();
             $table->string('payment_method');
-            $table->string('mop_id')->nullable();
+            $table->unsignedBigInteger('mop_id')->nullable()->index();
             $table->decimal('amount', 15, 2);
             $table->string('status');
             $table->string('reference_number')->nullable();
-            $table->string('provider_')->nullable();
+            $table->string('provider')->nullable();
             $table->dateTime('paid_at')->nullable();
             $table->json('meta')->nullable();
             $table->timestamps();

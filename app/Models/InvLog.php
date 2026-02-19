@@ -30,15 +30,15 @@ class InvLog extends Model
         'remarks',
     ];
 
-    public $incrementing = false;
+    // public $incrementing = false;
 
     public static function boot()
     {
         parent::boot();
-        self::creating(function ($model) {
-            $prefix = 'inl'.date(format: 'ym');
-            $model->id = IdGenerator::generate(['table' => 'inv_logs', 'length' => 30, 'prefix' => $prefix . str()->random(20)]);
-        });
+        // self::creating(function ($model) {
+        //     $prefix = 'inl'.date(format: 'ym');
+        //     $model->id = IdGenerator::generate(['table' => 'inv_logs', 'length' => 30, 'prefix' => $prefix . str()->random(20)]);
+        // });
         static::creating(function ($model) {
             if (empty($model->public_id)) {
                 $model->public_id = hash('sha256', Str::uuid());
@@ -46,7 +46,8 @@ class InvLog extends Model
         });
     }
 
-    public static function refTypeOptions(){
+    public static function refTypeOptions()
+    {
         return [
             self::REF_TYPE_PURCHASE => 'Purchase',
             self::REF_TYPE_SALE => 'Sale',

@@ -13,18 +13,19 @@ class PrInventory extends Model
         'loc_id'
     ];
 
-    public $incrementing = false;
+    // public $incrementing = false;
 
     public static function boot()
     {
         parent::boot();
         self::creating(function ($model) {
-            $prefix = 'pri'.date(format: 'ym');
-            $model->id = IdGenerator::generate(['table' => 'pr_inventories', 'length' => 20, 'prefix' => $prefix . str()->random(13)]);
+            // $prefix = 'pri'.date(format: 'ym');
+            // $model->id = IdGenerator::generate(['table' => 'pr_inventories', 'length' => 20, 'prefix' => $prefix . str()->random(13)]);
         });
     }
 
-    public function locations(){
+    public function locations()
+    {
         return $this->hasOne(Location::class, 'id', 'loc_id');
     }
 }

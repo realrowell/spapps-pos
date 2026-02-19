@@ -14,14 +14,14 @@ class TransDiscount extends Model
         'description'
     ];
 
-    public $incrementing = false;
+    // public $incrementing = false;
 
     public static function boot()
     {
         parent::boot();
         self::creating(function ($model) {
-            $prefix = 'dist'.date(format: 'ym');
-            $model->id = IdGenerator::generate(['table' => 'trans_discounts', 'length' => 20, 'prefix' => $prefix . str()->random(10)]);
+            // $prefix = 'dist'.date(format: 'ym');
+            // $model->id = IdGenerator::generate(['table' => 'trans_discounts', 'length' => 20, 'prefix' => $prefix . str()->random(10)]);
         });
     }
 }

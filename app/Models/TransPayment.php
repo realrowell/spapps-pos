@@ -25,15 +25,15 @@ class TransPayment extends Model
         'meta'
     ];
 
-    public $incrementing = false;
+    // public $incrementing = false;
 
     public static function boot()
     {
         parent::boot();
-        self::creating(function ($model) {
-            $prefix = 'trpp'.date(format: 'ym');
-            $model->id = IdGenerator::generate(['table' => 'trans_payments', 'length' => 35, 'prefix' => $prefix . str()->random(25)]);
-        });
+        // self::creating(function ($model) {
+        //     $prefix = 'trpp'.date(format: 'ym');
+        //     $model->id = IdGenerator::generate(['table' => 'trans_payments', 'length' => 35, 'prefix' => $prefix . str()->random(25)]);
+        // });
         static::creating(function ($model) {
             if (empty($model->public_id)) {
                 $model->public_id = hash('sha256', Str::uuid());
@@ -41,7 +41,8 @@ class TransPayment extends Model
         });
     }
 
-    public static function statusOptions(){
+    public static function statusOptions()
+    {
         return [
             self::STATUS_PENDING => 'Pending',
             self::STATUS_SUCCESS => 'Success',

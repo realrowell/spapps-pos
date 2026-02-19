@@ -12,18 +12,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('inv_logs', function (Blueprint $table) {
-            $table->string('id')->primary();
+            $table->id();
             $table->string('public_id')->unique();
-            $table->string('pr_id')->nullable();
+            $table->unsignedBigInteger('pr_id')->index()->nullable();
             $table->string('pr_name');
             $table->decimal('qty_change', 10, 3);
-            $table->string('loc_id')->nullable();
+            $table->unsignedBigInteger('loc_id')->index()->nullable();
             $table->decimal('stock_br', 10, 3);
             $table->decimal('stock_af', 10, 3);
             $table->string('ref_type')->nullable();
-            $table->string('ref_id')->nullable();
+            $table->unsignedBigInteger('ref_id')->nullable();
             $table->decimal('unit_cost', 12, 2)->nullable();
-            $table->decimal('total_cost', 14, 2)->nullable();
+            $table->decimal('unit_price', 12, 2)->nullable();
             $table->string('remarks')->nullable();
             $table->timestamps();
         });

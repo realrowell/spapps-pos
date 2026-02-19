@@ -12,11 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('pr_prices', function (Blueprint $table) {
-            $table->string('id')->primary();
+            $table->id();
             $table->string('price_code')->unique();
-            $table->string('pr_id');
+            $table->unsignedBigInteger('pr_id')->index();
             $table->string('price_type')->nullable();
-            $table->decimal('price',12,2)->default(0);
+            $table->decimal('price', 12, 2)->default(0);
             $table->boolean('is_active')->default(true);
             $table->dateTime('effective_from')->nullable();
             $table->dateTime('effective_to')->nullable();

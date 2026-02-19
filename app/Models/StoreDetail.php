@@ -12,15 +12,15 @@ class StoreDetail extends Model
         'store_desc'
     ];
 
-    public $incrementing = false;
+    // public $incrementing = false;
 
     public static function boot()
     {
         parent::boot();
         self::creating(function ($model) {
-            $prefix = 'str'.date(format: 'ym');
-            $model->id = IdGenerator::generate(['table' => 'store_details', 'length' => 20, 'prefix' => $prefix . str()->random(10)]);
-            $model->code = IdGenerator::generate(['table' => 'store_details', 'field' => 'store_code', 'length' => 8, 'prefix' => str()->random(7)]);
+            // $prefix = 'str'.date(format: 'ym');
+            // $model->id = IdGenerator::generate(['table' => 'store_details', 'length' => 20, 'prefix' => $prefix . str()->random(10)]);
+            $model->store_code = IdGenerator::generate(['table' => 'store_details', 'field' => 'store_code', 'length' => 8, 'prefix' => str()->random(7)]);
         });
     }
 }

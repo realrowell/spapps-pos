@@ -12,10 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('store_details', function (Blueprint $table) {
-            $table->string('id')->primary();
+            $table->id();
             $table->string('store_code')->unique();
             $table->string('store_name');
             $table->string('store_desc')->nullable();
+            $table->string('logo')->nullable();
+            $table->string('primary_color')->nullable();
+            $table->string('accent_color')->nullable();
             $table->timestamps();
         });
     }
