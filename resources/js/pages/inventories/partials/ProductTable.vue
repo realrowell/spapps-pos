@@ -153,7 +153,7 @@ const columns: ColumnDef<Product>[] = [
                 { class: 'capitalize flex flex-col w-100' },
                 [
                     h('span', { class: 'font-medium truncate w-full'}, row.getValue('pr_name')),
-                    h('span', { class: 'text-muted-foreground text-xs truncate w-full'}, row.original?.pr_desc ?? null)
+                    h('span', { class: 'text-muted-foreground text-xs truncate w-full'}, row.original?.pr_short_desc ?? null)
                 ]
             )
         },

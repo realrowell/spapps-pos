@@ -23,6 +23,7 @@ class StoreProductRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
+            'short_desc' => 'nullable|string|max:255',
             'description' => 'nullable|string',
             'category' => 'nullable',
             'brand' => 'nullable',
@@ -35,6 +36,30 @@ class StoreProductRequest extends FormRequest
             'price_effective_to' => 'nullable|date|after_or_equal:price_effective_from',
             'stock' => 'nullable|integer|min:0',
             'stock_location' => 'nullable',
+            'sku' => 'nullable|string',
+            'barcode' => 'nullable|string',
+            'serial_number' => 'nullable|string',
+            'warranty' => 'nullable|string',
+            'alert_threshold' => 'nullable|integer',
+            'track_inventory' => 'nullable|boolean'
         ];
     }
+
+    public function messages(): array
+{
+    return [
+        'short_desc.max' => 'The description must not exceed 255 characters.',
+
+        'name.required' => 'Product name is required.',
+
+        'price.required' => 'Price is required.',
+
+        'price.numeric' => 'Price must be a valid number.',
+
+        'thumbnail.image' => 'Thumbnail must be an image file.',
+
+        'price_effective_to.after_or_equal' =>
+            'Effective To must be after or equal to Effective From.',
+    ];
+}
 }

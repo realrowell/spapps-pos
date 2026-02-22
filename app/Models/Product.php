@@ -28,6 +28,13 @@ class Product extends Model
     protected $fillable = [
         'pr_name',
         'pr_desc',
+        'pr_short_desc',
+        'sku',
+        'barcode',
+        'alert_threshold',
+        'serial_number',
+        'warranty_info',
+        'avg_cost',
         'cat_id',
         'brand_id',
         'pr_thumbnail',

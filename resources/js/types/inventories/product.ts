@@ -1,7 +1,13 @@
 export interface Product {
     pr_code: string
     pr_name: string
+    pr_short_desc: string
     pr_desc: string
+    sku: string
+    barcode: string
+    avg_cost: number
+    alert_threshold: number
+    is_track_inventory: boolean
     categories: {
         cat_name: string
     }
@@ -13,6 +19,8 @@ export interface Product {
     status: string
     prices: Price[]
     pr_inventories: PrInventory[]
+    serial_number: string
+    warranty_info: string
 }
 
 export interface Price {

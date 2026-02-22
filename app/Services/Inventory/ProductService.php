@@ -78,11 +78,18 @@ class ProductService extends \App\Services\BaseService
 
             $product = Product::create([
                 'pr_name' => $data['name'],
-                'pr_desc' => $data['description'],
+                'pr_short_desc' => $data['short_desc'] ?? null,
+                'pr_desc' => $data['description'] ?? null,
+                'sku' => $data['sku'] ?? null,
+                'barcode' => $data['barcode'] ?? null,
+                'alert_threshold' => $data['alert_threshold'] ?? null,
+                'serial_number' => $data['serial_number'] ?? null,
+                'warranty_info' => $data['warranty'] ?? null,
                 'cat_id' => $cat_id->id,
                 'brand_id' => $brand_id->id,
                 'uom' => $data['uom'],
                 'status' => $data['status'],
+                'is_track_inventory' => $data['track_inventory'] ?? false,
             ]);
 
             $price = PrPrice::create([
@@ -94,7 +101,7 @@ class ProductService extends \App\Services\BaseService
                 'effective_to' => $data['price_effective_to']
             ]);
 
-            if($data['stock'] && $loc_id->id){
+            if($data['stock'] && $loc_id->id ?? null){
                 $inventory = PrInventory::create([
                     'pr_id' => $product->id,
                     'stock_qty' => $data['stock'],
