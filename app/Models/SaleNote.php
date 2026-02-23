@@ -2,16 +2,15 @@
 
 namespace App\Models;
 
-use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Database\Eloquent\Model;
 
-class TransNote extends Model
+class SaleNote extends Model
 {
     public const TYPE_SYSTEM = 'system';
     public const TYPE_MANUAL = 'manual';
 
     protected $fillable = [
-        'trans_id',
+        'sale_id',
         'note_type',
         'note',
         'created_by'

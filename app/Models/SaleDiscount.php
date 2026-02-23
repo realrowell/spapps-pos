@@ -2,15 +2,15 @@
 
 namespace App\Models;
 
-use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Database\Eloquent\Model;
 
-class TransDiscount extends Model
+class SaleDiscount extends Model
 {
     protected $fillable = [
-        'trans_id',
+        'sale_id',
         'disc_id',
         'amount',
+        'disc_name',
         'description'
     ];
 

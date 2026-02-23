@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('trans_notes', function (Blueprint $table) {
+        Schema::create('sale_discounts', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('trans_id')->index();
-            $table->string('note_type');
-            $table->text('note');
-            $table->string('created_by');
+            $table->unsignedBigInteger('sale_id')->index();
+            $table->unsignedBigInteger('disc_id')->nullable()->index();
+            $table->decimal('amount', 12, 2)->default(0);
+            $table->string('disc_name');
+            $table->string('description')->nullable();
             $table->timestamps();
         });
     }
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('trans_notes');
+        Schema::dropIfExists('sale_discounts');
     }
 };

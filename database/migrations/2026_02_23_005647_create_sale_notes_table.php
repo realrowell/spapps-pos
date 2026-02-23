@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('trans_discounts', function (Blueprint $table) {
+        Schema::create('sale_notes', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('trans_id')->index();
-            $table->unsignedBigInteger('disc_id')->nullable()->index();
-            $table->decimal('amount', 15, 2)->default(0);
-            $table->string('description');
+            $table->unsignedBigInteger('sale_id')->index();
+            $table->string('note_type');
+            $table->text('note');
+            $table->string('created_by');
             $table->timestamps();
         });
     }
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('trans_discounts');
+        Schema::dropIfExists('sale_notes');
     }
 };
