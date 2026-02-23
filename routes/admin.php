@@ -5,6 +5,7 @@ use App\Http\Controllers\Inventory\BrandManagementController;
 use App\Http\Controllers\Inventory\CategoryManagementController;
 use App\Http\Controllers\Inventory\LocationManagementController;
 use App\Http\Controllers\Inventory\ProductManagementController;
+use App\Http\Controllers\SalePageController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 // use Laravel\Fortify\Features;
@@ -39,4 +40,9 @@ Route::prefix('inventory')->name('inventory-')->group(function () {
     Route::post('categories/store', [CategoryManagementController::class, 'store'])->name('categories-store');
     Route::post('brands/store', [BrandManagementController::class, 'store'])->name('brands-store');
     Route::post('locations/store', [LocationManagementController::class, 'store'])->name('locations-store');
+});
+
+Route::prefix('sale')->middleware('auth')->controller(SalePageController::class)->name('sale-')->group(function () {
+    Route::get('sales', 'SalesPage')->name('sales');
+    Route::get('point-of-sale', 'PointOfSale')->name('pos');
 });

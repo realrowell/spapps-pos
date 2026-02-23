@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
-import { BookOpen, Folder, LayoutGrid, Package } from 'lucide-vue-next';
+import { BookOpen, Folder, LayoutGrid, Package, Receipt, ScanLine } from 'lucide-vue-next';
 import NavFooter from '@/components/NavFooter.vue';
 import NavMain from '@/components/NavMain.vue';
 import NavUser from '@/components/NavUser.vue';
@@ -13,7 +13,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { dashboard, inventoryProducts, inventoryCategories, inventoryBrands, inventoryLocations } from '@/routes';
+import { dashboard, inventoryProducts, inventoryCategories, inventoryBrands, inventoryLocations, saleSales, salePos } from '@/routes';
 import { type NavItem } from '@/types';
 import AppLogo from './AppLogo.vue';
 
@@ -49,6 +49,27 @@ const mainNavItems: NavItem[] = [
             //     href: inventory(),
             // },
         ],
+    },
+    {
+        title: 'Sales',
+        // href: inventory(),
+        icon: Receipt,
+        children: [
+            {
+                title: 'Sales',
+                href: saleSales(),
+            },
+        ],
+    },
+    {
+        title: 'Point of Sale',
+        href: salePos(),
+        icon: ScanLine,
+    },
+    {
+        title: 'Mode of Payments',
+        href: dashboard(),
+        icon: LayoutGrid,
     },
 ];
 
