@@ -4,9 +4,11 @@ namespace App\Models;
 
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Location extends Model
 {
+    use HasFactory;
     protected $fillable = [
         'loc_name',
         'loc_desc',
@@ -19,9 +21,9 @@ class Location extends Model
     {
         parent::boot();
         self::creating(function ($model) {
-            // $prefix = 'loc';
-            // $model->id = IdGenerator::generate(['table' => 'locations', 'length' => 15, 'prefix' => $prefix . str()->random(10)]);
-            $model->loc_code = IdGenerator::generate(['table' => 'locations', 'field' => 'loc_code', 'length' => 8, 'prefix' => str()->random(5)]);
+            if (empty($model->loc_code)) {
+                $model->loc_code = IdGenerator::generate(['table' => 'locations', 'field' => 'loc_code', 'length' => 8, 'prefix' => str()->random(5)]);
+            }
         });
     }
 }

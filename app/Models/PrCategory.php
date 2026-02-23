@@ -4,9 +4,11 @@ namespace App\Models;
 
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class PrCategory extends Model
 {
+    use HasFactory;
     protected $fillable = [
         'cat_name',
         'is_active'
