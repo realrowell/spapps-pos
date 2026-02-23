@@ -11,20 +11,22 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('transactions', function (Blueprint $table) {
+        Schema::create('sales', function (Blueprint $table) {
             $table->id();
-            $table->string('trans_ref')->unique();
-            $table->string('trans_type');
-            $table->unsignedBigInteger('store_id')->nullable()->index();
-            $table->decimal('gross_amount', 15, 2);
-            $table->decimal('discount_amount', 15, 2)->default(0);
-            $table->decimal('tax_amount', 15, 2)->default(0);
-            $table->decimal('net_amount', 15, 2);
+            $table->string('sale_ref')->unique();
+            $table->string('trans_type')->default('sale');
+            $table->decimal('gross_amount', 12, 2);
+            $table->decimal('total_discount_amount', 12, 2)->default(0);
+            $table->decimal('tax_amount', 12, 2)->default(0);
+            $table->decimal('net_amount', 12, 2);
             $table->string('status');
             $table->string('transacted_by');
             $table->unsignedBigInteger('user_id')->nullable()->index();
+            $table->unsignedBigInteger('store_id')->nullable()->index();
             $table->dateTime('completed_at')->nullable();
+            $table->unsignedBigInteger('parent_sale_id')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -33,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('transactions');
+        Schema::dropIfExists('sales');
     }
 };

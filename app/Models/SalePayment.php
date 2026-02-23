@@ -2,11 +2,10 @@
 
 namespace App\Models;
 
-use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
-class TransPayment extends Model
+class SalePayment extends Model
 {
     public const STATUS_PENDING = 'pending';
     public const STATUS_SUCCESS = 'success';
@@ -14,8 +13,8 @@ class TransPayment extends Model
     public const STATUS_REVERSED = 'reversed';
 
     protected $fillable = [
-        'trans_id',
-        'payment_method',
+        'sale_id',
+        'mop',
         'mop_id',
         'amount',
         'status',
@@ -30,13 +29,9 @@ class TransPayment extends Model
     public static function boot()
     {
         parent::boot();
-        // self::creating(function ($model) {
-        //     $prefix = 'trpp'.date(format: 'ym');
-        //     $model->id = IdGenerator::generate(['table' => 'trans_payments', 'length' => 35, 'prefix' => $prefix . str()->random(25)]);
-        // });
         static::creating(function ($model) {
-            if (empty($model->public_id)) {
-                $model->public_id = hash('sha256', Str::uuid());
+            if (empty($model->payment_ref)) {
+                $model->payment_ref = 'INVP' . date('ym') . hash('sha256', Str::uuid());
             }
         });
     }

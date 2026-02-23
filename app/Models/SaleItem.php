@@ -2,18 +2,18 @@
 
 namespace App\Models;
 
-use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Database\Eloquent\Model;
 
-class TransItem extends Model
+class SaleItem extends Model
 {
     protected $fillable = [
-        'trans_id',
+        'sale_id',
         'pr_id',
         'pr_name',
         'uom',
         'qty',
-        'pr_price',
+        'price_type',
+        'unit_price',
         'line_total'
     ];
 

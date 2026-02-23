@@ -4,15 +4,11 @@ namespace App\Models;
 
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Transaction extends Model
+class Sale extends Model
 {
-    public const TYPE_SALE = 'sale';
-    public const TYPE_REFUND = 'refund';
-    public const STATUS_PENDING = 'pending';
-    public const STATUS_COMPLETED = 'completed';
-    public const STATUS_VOIDED = 'voided';
-    public const STATUS_REFUNDED = 'refunded';
+    use SoftDeletes;
 
     protected $fillable = [
         'trans_type',
@@ -33,11 +29,19 @@ class Transaction extends Model
     {
         parent::boot();
         self::creating(function ($model) {
-            // $prefix = 'tra'.date(format: 'ym');
-            // $model->id = IdGenerator::generate(['table' => 'transactions', 'length' => 30, 'prefix' => $prefix . str()->random(20)]);
-            $model->trans_ref = IdGenerator::generate(['table' => 'transactions', 'field' => 'trans_ref', 'length' => 10, 'prefix' => str()->random(8)]);
+            $prefix = 'INV-' . date('ym');
+            $model->trans_ref = IdGenerator::generate(['table' => 'sales', 'field' => 'sale_ref', 'length' => 11, 'prefix' => $prefix]);
         });
     }
+
+
+
+    public const TYPE_SALE = 'sale';
+    public const TYPE_REFUND = 'refund';
+    public const STATUS_DRAFT = 'draft';
+    public const STATUS_COMPLETED = 'completed';
+    public const STATUS_VOIDED = 'voided';
+    public const STATUS_PARTIAL = 'partial';
 
     public static function typeOptions()
     {
@@ -49,25 +53,25 @@ class Transaction extends Model
     public static function statusOptions()
     {
         return [
-            self::STATUS_PENDING => [
-                'status' => 'Pend',
-                'present' => 'Pending',
-                'past' => 'Pended',
+            self::STATUS_DRAFT => [
+                'status' => 'Draft',
+                'present' => 'Drafting',
+                'past' => 'Drafted',
             ],
             self::STATUS_COMPLETED => [
                 'status' => 'Complete',
-                'present' => 'Completed',
+                'present' => 'Completing',
                 'past' => 'Completed',
             ],
             self::STATUS_VOIDED => [
                 'status' => 'Void',
-                'present' => 'Voided',
+                'present' => 'Voiding',
                 'past' => 'Voided',
             ],
-            self::STATUS_REFUNDED => [
-                'status' => 'Refund',
-                'present' => 'Refunded',
-                'past' => 'Refunded',
+            self::STATUS_PARTIAL => [
+                'status' => 'Partial',
+                'present' => 'Partialing ',
+                'past' => 'Partialed ',
             ],
         ];
     }
