@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('mop_type');
             $table->string('mop_name');
             $table->boolean('is_active')->default(true);
+            $table->string('lucide_icon')->nullable();
             $table->timestamps();
         });
     }
