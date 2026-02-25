@@ -164,17 +164,20 @@ const { map } = useToggleContainerMap({
                                             Clear
                                         </Button>
                                     </div>
+                                    <div v-if="form.errors.brand" class="text-red-500 text-sm">
+                                        {{ form.errors.brand }}
+                                    </div>
                                 </div>
                                 <div class="flex flex-col gap-3">
                                     <Label for="category">Category</Label>
                                     <div class="flex flex-row gap-1 w-50">
                                         <Select v-model="form.category">
-                                            <SelectTrigger class="w-full truncate">
+                                            <SelectTrigger class="w-full">
                                                 <SelectValue placeholder="Select category" />
                                             </SelectTrigger>
                                             <SelectContent>
                                                 <SelectGroup>
-                                                    <SelectLabel>Brands</SelectLabel>
+                                                    <SelectLabel>Categories</SelectLabel>
                                                     <SelectItem v-for="category in categories" :key="category.cat_code" :value="category.cat_code">
                                                         {{ category.cat_name }}
                                                     </SelectItem>
@@ -188,6 +191,9 @@ const { map } = useToggleContainerMap({
                                         >
                                             Clear
                                         </Button>
+                                    </div>
+                                    <div v-if="form.errors.category" class="text-red-500 text-sm">
+                                        {{ form.errors.category }}
                                     </div>
                                 </div>
                                 <div class="flex flex-col gap-3">
@@ -213,6 +219,9 @@ const { map } = useToggleContainerMap({
                                         >
                                             Clear
                                         </Button>
+                                    </div>
+                                    <div v-if="form.errors.status" class="text-red-500 text-sm">
+                                        {{ form.errors.status }}
                                     </div>
                                 </div>
                             </div>
@@ -278,6 +287,9 @@ const { map } = useToggleContainerMap({
                                             Clear
                                         </Button>
                                     </div>
+                                    <div v-if="form.errors.uom" class="text-red-500 text-sm">
+                                        {{ form.errors.uom }}
+                                    </div>
                                 </div>
                             </div>
                             <div class="flex flex-col gap-5 w-50">
@@ -298,6 +310,9 @@ const { map } = useToggleContainerMap({
                                             <NumberFieldIncrement />
                                         </NumberFieldContent>
                                     </NumberField>
+                                    <div v-if="form.errors.alert_threshold" class="text-red-500 text-sm">
+                                        {{ form.errors.alert_threshold }}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -310,7 +325,7 @@ const { map } = useToggleContainerMap({
                         <div class="flex flex-col gap-3">
                             <Label for="desc">Product Details</Label>
                             <RichTextEditor  id="desc" v-model="form.description"/>
-                            <div v-if="form.errors.name" class="text-red-500 text-sm">
+                            <div v-if="form.errors.description" class="text-red-500 text-sm">
                                 {{ form.errors.description }}
                             </div>
                         </div>
@@ -344,6 +359,9 @@ const { map } = useToggleContainerMap({
                                         Clear
                                     </Button>
                                 </div>
+                                <div v-if="form.errors.price_type" class="text-red-500 text-sm">
+                                    {{ form.errors.price_type }}
+                                </div>
                             </div>
                             <div class="flex flex-col gap-3">
                                 <Label for="price">Price</Label>
@@ -365,14 +383,23 @@ const { map } = useToggleContainerMap({
                                         <NumberFieldIncrement />
                                     </NumberFieldContent>
                                 </NumberField>
+                                <div v-if="form.errors.price" class="text-red-500 text-sm">
+                                    {{ form.errors.price }}
+                                </div>
                             </div>
                             <div class="flex flex-col gap-3">
                                 <Label for="effective_date">Effective from</Label>
                                 <Input class="w-50" id="effective_date" type="date" v-model="form.price_effective_from" />
+                                <div v-if="form.errors.price_effective_from" class="text-red-500 text-sm">
+                                    {{ form.errors.price_effective_from }}
+                                </div>
                             </div>
                             <div class="flex flex-col gap-3">
                                 <Label for="effective_date">Effective to</Label>
                                 <Input class="w-50" id="effective_date" type="date" v-model="form.price_effective_to" />
+                                <div v-if="form.errors.price_effective_to" class="text-red-500 text-sm">
+                                    {{ form.errors.price_effective_to }}
+                                </div>
                             </div>
                         </div>
                         <div v-if="form.track_inventory" class="flex flex-col md:flex-row sm:flex-col gap-3">
@@ -400,6 +427,9 @@ const { map } = useToggleContainerMap({
                                         Clear
                                     </Button>
                                 </div>
+                                <div v-if="form.errors.stock_location" class="text-red-500 text-sm">
+                                    {{ form.errors.stock_location }}
+                                </div>
                             </div>
                             <div class="flex flex-col gap-3">
                                 <Label for="stock">Stock Quantity</Label>
@@ -415,11 +445,15 @@ const { map } = useToggleContainerMap({
                                         <NumberFieldIncrement />
                                     </NumberFieldContent>
                                 </NumberField>
+                                <div v-if="form.errors.stock" class="text-red-500 text-sm">
+                                    {{ form.errors.stock }}
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <Button type="submit" :disabled="form.processing" class="w-fit">
+                    <Spinner v-if="form.processing" />
                     Submit
                 </Button>
             </form>

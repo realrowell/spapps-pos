@@ -12,7 +12,8 @@ class ModeOfPayment extends Model
     protected $fillable = [
         'mop_type',
         'mop_name',
-        'is_active'
+        'is_active',
+        'lucide_icon',
     ];
 
     // public $incrementing = false;
