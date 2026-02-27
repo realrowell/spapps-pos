@@ -3,15 +3,17 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
 class PurchasePayment extends Model
 {
+    use SoftDeletes;
     protected $fillable = [
         'purchase_id',
-        'mop',
-        'mop_id',
+        'payment_provider_id',
         'amount',
+        'external_transaction_id',
         'reference_no',
         'paid_at'
     ];

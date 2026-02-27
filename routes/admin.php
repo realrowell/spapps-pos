@@ -5,7 +5,9 @@ use App\Http\Controllers\Inventory\BrandManagementController;
 use App\Http\Controllers\Inventory\CategoryManagementController;
 use App\Http\Controllers\Inventory\LocationManagementController;
 use App\Http\Controllers\Inventory\ProductManagementController;
-use App\Http\Controllers\SalePageController;
+use App\Http\Controllers\Sale\ModeOfPaymentsManagementController;
+use App\Http\Controllers\Admin\SalePageController;
+use App\Http\Controllers\Sale\PaymentProviderManagementController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 // use Laravel\Fortify\Features;
@@ -42,7 +44,17 @@ Route::prefix('inventory')->name('inventory-')->group(function () {
     Route::post('locations/store', [LocationManagementController::class, 'store'])->name('locations-store');
 });
 
+
 Route::prefix('sale')->middleware('auth')->controller(SalePageController::class)->name('sale-')->group(function () {
     Route::get('sales', 'SalesPage')->name('sales');
     Route::get('point-of-sale', 'PointOfSale')->name('pos');
+    Route::get('mode-of-payments', 'ModeOfPaymentsPage')->name('mops');
+    Route::get('mode-of-payments/create', 'MOPCreate')->name('mops-create');
+    Route::get('payment-providers', 'PaymentProvidersPage')->name('payment-providers');
+    Route::get('payment-providers/create', 'PaymentProvidersCreate')->name('payment-providers-create');
+});
+
+Route::prefix('sale')->name('sale-')->group(function () {
+    Route::post('mode-of-payments/store', [ModeOfPaymentsManagementController::class, 'store'])->name('mode-of-payments-store');
+    Route::post('payment-providers/store', [PaymentProviderManagementController::class, 'store'])->name('payment-providers-store');
 });

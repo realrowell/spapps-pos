@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
 class SalePayment extends Model
 {
+    use SoftDeletes;
     public const STATUS_PENDING = 'pending';
     public const STATUS_SUCCESS = 'success';
     public const STATUS_FAILED = 'failed';
@@ -14,12 +16,11 @@ class SalePayment extends Model
 
     protected $fillable = [
         'sale_id',
-        'mop',
-        'mop_id',
+        'payment_provider_id',
         'amount',
         'status',
+        'external_transaction_id',
         'reference_no',
-        'provider',
         'paid_at',
         'meta'
     ];

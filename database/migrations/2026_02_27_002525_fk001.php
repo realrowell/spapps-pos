@@ -31,7 +31,7 @@ return new class extends Migration
         });
         Schema::table('sale_payments', function (Blueprint $table) {
             $table->foreign('sale_id')->references('id')->on('sales')->onDelete('restrict');
-            $table->foreign('mop_id')->references('id')->on('mode_of_payments')->nullOnDelete();
+            $table->foreign('payment_provider_id')->references('id')->on('payment_providers')->onDelete('restrict');
         });
         Schema::table('sales', function (Blueprint $table) {
             $table->foreign('store_id')->references('id')->on('stores')->nullOnDelete();
@@ -55,7 +55,7 @@ return new class extends Migration
         });
         Schema::table('purchase_payments', function (Blueprint $table) {
             $table->foreign('purchase_id')->references('id')->on('purchases')->onDelete('restrict');
-            $table->foreign('mop_id')->references('id')->on('mode_of_payments')->nullOnDelete();
+            $table->foreign('payment_provider_id')->references('id')->on('payment_providers')->onDelete('restrict');
         });
         Schema::table('purchase_items', function (Blueprint $table) {
             $table->foreign('purchase_id')->references('id')->on('purchases')->onDelete('restrict');
@@ -65,6 +65,9 @@ return new class extends Migration
             $table->foreign('purchase_id')->references('id')->on('purchases')->onDelete('restrict');
             $table->foreign('user_id')->references('id')->on('users')->nullOnDelete();
         });
+        Schema::table('payment_providers', function (Blueprint $table) {
+            $table->foreign('mop_id')->references('id')->on('mode_of_payments')->onDelete('restrict');
+        });
     }
 
     /**
@@ -72,6 +75,10 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::table('payment_providers', function (Blueprint $table) {
+            $table->dropForeign(['mop_id']);
+        });
+
         Schema::table('purchase_logs', function (Blueprint $table) {
             $table->dropForeign(['pruchase_id']);
             $table->dropForeign(['user_id']);
@@ -84,7 +91,7 @@ return new class extends Migration
 
         Schema::table('purchase_payments', function (Blueprint $table) {
             $table->dropForeign(['pruchase_id']);
-            $table->dropForeign(['mop_id']);
+            $table->dropForeign(['payment_provider_id']);
         });
 
         Schema::table('purchases', function (Blueprint $table) {
@@ -115,7 +122,7 @@ return new class extends Migration
 
         Schema::table('sales_payments', function (Blueprint $table) {
             $table->dropForeign(['sale_id']);
-            $table->dropForeign(['mop_id']);
+            $table->dropForeign(['payment_provider_id']);
         });
 
         Schema::table('usr_module_checks', function (Blueprint $table) {
