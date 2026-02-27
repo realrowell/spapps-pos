@@ -11,14 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('mode_of_payments', function (Blueprint $table) {
+        Schema::create('payment_providers', function (Blueprint $table) {
             $table->id();
-            $table->string('mop_code')->unique();
-            $table->string('mop_type');
-            $table->string('mop_name');
+            $table->string('provider_code')->unique();
+            $table->string('provider_name');
+            $table->unsignedBigInteger('mop_id');
+            $table->string('account_name')->nullable();
+            $table->string('account_number')->nullable();
             $table->boolean('is_active')->default(false);
-            $table->string('lucide_icon')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -27,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('mode_of_payments');
+        Schema::dropIfExists('payment_providers');
     }
 };

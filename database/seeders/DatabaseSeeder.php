@@ -17,9 +17,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        PrBrand::factory()->count(20)->create();
-        Vendor::factory()->count(10)->create();
-        Location::factory()->count(10)->create();
+        // PrBrand::factory()->count(20)->create();
+        // Vendor::factory()->count(10)->create();
+        // Location::factory()->count(10)->create();
         PrCategory::factory()->count(10)->create();
 
         $this->call([

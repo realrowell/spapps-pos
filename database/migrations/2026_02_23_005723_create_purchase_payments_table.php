@@ -15,12 +15,13 @@ return new class extends Migration
             $table->id();
             $table->string('purchase_ref')->unique();
             $table->unsignedBigInteger('purchase_id')->index();
-            $table->string('mop');
-            $table->unsignedBigInteger('mop_id')->nullable();
+            $table->unsignedBigInteger('payment_provider_id')->nullable();
             $table->decimal('amount', 12, 2);
+            $table->string('external_transaction_id')->nullable();
             $table->string('reference_no')->nullable();
-            $table->dateTime('paid_at');
+            $table->dateTime('paid_at')->nullable()->index();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

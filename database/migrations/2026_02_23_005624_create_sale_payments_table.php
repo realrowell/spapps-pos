@@ -15,15 +15,15 @@ return new class extends Migration
             $table->id();
             $table->string('payment_ref')->unique();
             $table->unsignedBigInteger('sale_id')->index();
-            $table->string('mop');
-            $table->unsignedBigInteger('mop_id')->nullable()->index();
+            $table->unsignedBigInteger('payment_provider_id')->nullable()->index();
             $table->decimal('amount', 12, 2);
             $table->string('status');
+            $table->string('external_transaction_id')->nullable();
             $table->string('reference_no')->nullable();
-            $table->string('provider')->nullable();
-            $table->dateTime('paid_at')->nullable();
+            $table->dateTime('paid_at')->nullable()->index();
             $table->json('meta')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
