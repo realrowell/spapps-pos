@@ -15,9 +15,9 @@ class Purchase extends Model
         'vendor_id',
         'status',
         'payment_status',
-        'gross_amount',
+        'subtotal',
         'tax_amount',
-        'net_amount',
+        'total_amount',
         'expected_delivery_date',
         'due_date',
         'parent_purchase_id'

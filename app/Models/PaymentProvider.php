@@ -27,4 +27,8 @@ class PaymentProvider extends Model
             }
         });
     }
+
+    public function mops(){
+        return $this->hasOne(ModeOfPayment::class, 'id', 'mop_id');
+    }
 }

@@ -11,12 +11,13 @@ class Sale extends Model
     use SoftDeletes;
 
     protected $fillable = [
+        'sale_ref',
         'trans_type',
         'store_id',
-        'gross_amount',
+        'subtotal',
         'discount_amount',
         'tax_amount',
-        'net_amount',
+        'total_amount',
         'status',
         'transacted_by',
         'user_id',
@@ -29,8 +30,8 @@ class Sale extends Model
     {
         parent::boot();
         self::creating(function ($model) {
-            $prefix = 'INV-' . date('ym');
-            $model->trans_ref = IdGenerator::generate(['table' => 'sales', 'field' => 'sale_ref', 'length' => 11, 'prefix' => $prefix]);
+            $prefix = 'SO' . date('ym').'-';
+            $model->sale_ref = IdGenerator::generate(['table' => 'sales', 'field' => 'sale_ref', 'length' => 11, 'prefix' => $prefix]);
         });
     }
 

@@ -18,9 +18,9 @@ return new class extends Migration
             $table->unsignedBigInteger('vendor_id');
             $table->string('status');
             $table->string('payment_status')->default('unpaid');
-            $table->decimal('gross_amount', 12, 2);
+            $table->decimal('subtotal', 12, 2);
             $table->decimal('tax_amount', 12, 2)->default(0);
-            $table->decimal('net_amount', 12, 2);
+            $table->decimal('total_amount', 12, 2);
             $table->dateTime('expected_delivery_date')->nullable();
             $table->dateTime('due_date')->nullable();
             $table->unsignedBigInteger('parent_purchase_id')->nullable();

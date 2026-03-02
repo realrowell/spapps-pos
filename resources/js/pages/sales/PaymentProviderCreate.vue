@@ -12,6 +12,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select'
+import Spinner from '@/components/ui/spinner/Spinner.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { salePaymentProviders, salePaymentProvidersCreate, salePaymentProvidersStore, saleSales } from '@/routes';
 import { type BreadcrumbItem } from '@/types';

@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('sale_ref')->unique();
             $table->string('trans_type')->default('sale');
-            $table->decimal('gross_amount', 12, 2);
-            $table->decimal('total_discount_amount', 12, 2)->default(0);
+            $table->decimal('subtotal', 12, 2);
+            $table->decimal('discount_amount', 12, 2)->default(0);
             $table->decimal('tax_amount', 12, 2)->default(0);
-            $table->decimal('net_amount', 12, 2);
+            $table->decimal('total_amount', 12, 2);
             $table->string('status');
             $table->string('transacted_by');
             $table->unsignedBigInteger('user_id')->nullable()->index();
