@@ -21,6 +21,10 @@ class ProductService extends \App\Services\BaseService
         return Product::with(['categories', 'brands', 'prices', 'prInventories.locations'])->get();
     }
 
+    public function getAllActive(){
+        return Product::where('status', 'active')->with(['categories', 'brands', 'prices', 'prInventories.locations'])->get();
+    }
+
     /**
      * Get stuses products.
      */

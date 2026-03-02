@@ -8,6 +8,7 @@ use App\Http\Controllers\Inventory\ProductManagementController;
 use App\Http\Controllers\Sale\ModeOfPaymentsManagementController;
 use App\Http\Controllers\Admin\SalePageController;
 use App\Http\Controllers\Sale\PaymentProviderManagementController;
+use App\Http\Controllers\Sale\PointOfSaleManagementController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 // use Laravel\Fortify\Features;
@@ -57,4 +58,5 @@ Route::prefix('sale')->middleware('auth')->controller(SalePageController::class)
 Route::prefix('sale')->name('sale-')->group(function () {
     Route::post('mode-of-payments/store', [ModeOfPaymentsManagementController::class, 'store'])->name('mode-of-payments-store');
     Route::post('payment-providers/store', [PaymentProviderManagementController::class, 'store'])->name('payment-providers-store');
+    Route::post('point-of-sale/create', [PointOfSaleManagementController::class, 'store'])->name('point-of-sale-create');
 });

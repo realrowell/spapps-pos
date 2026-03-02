@@ -21,7 +21,7 @@ class PaymentProviderService extends \App\Services\BaseService
      */
     public function getAllActive(): Collection
     {
-        return PaymentProvider::where('is_active', true)->get();
+        return PaymentProvider::where('is_active', true)->with(['mops'])->get();
     }
 
     /**
