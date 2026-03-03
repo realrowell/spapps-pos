@@ -49,6 +49,7 @@ Route::prefix('inventory')->name('inventory-')->group(function () {
 Route::prefix('sale')->middleware('auth')->controller(SalePageController::class)->name('sale-')->group(function () {
     Route::get('sales', 'SalesPage')->name('sales');
     Route::get('point-of-sale', 'PointOfSale')->name('pos');
+    Route::get('point-of-sale/payment', 'PointOfSalePayment')->name('pos-payment');
     Route::get('mode-of-payments', 'ModeOfPaymentsPage')->name('mops');
     Route::get('mode-of-payments/create', 'MOPCreate')->name('mops-create');
     Route::get('payment-providers', 'PaymentProvidersPage')->name('payment-providers');
@@ -59,4 +60,5 @@ Route::prefix('sale')->name('sale-')->group(function () {
     Route::post('mode-of-payments/store', [ModeOfPaymentsManagementController::class, 'store'])->name('mode-of-payments-store');
     Route::post('payment-providers/store', [PaymentProviderManagementController::class, 'store'])->name('payment-providers-store');
     Route::post('point-of-sale/create', [PointOfSaleManagementController::class, 'store'])->name('point-of-sale-create');
+    Route::post('point-of-sale/payment', [PointOfSaleManagementController::class, 'payment'])->name('point-of-sale-payment');
 });
