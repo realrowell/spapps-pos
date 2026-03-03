@@ -42,6 +42,11 @@ class PaymentProviderService extends \App\Services\BaseService
         return PaymentProvider::find($id);
     }
 
+    public function findByCode(string $code): ?PaymentProvider
+    {
+        return PaymentProvider::where('provider_code', $code)->first();
+    }
+
     /**
      * Create new category.
      */

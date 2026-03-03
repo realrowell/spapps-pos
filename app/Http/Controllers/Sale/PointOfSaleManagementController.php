@@ -41,17 +41,21 @@ class PointOfSaleManagementController extends Controller
     }
 
     public function store(StoreSaleOrderRequest $request, SaleOrderService $saleOrderService){
-        // dd($request);
-        $saleOrderService->create($request->validated());
+        // dd($request->validated()['payment_method']);
+        $saleOrder = $saleOrderService->create($request->validated());
+        $paymentMethod = $this->paymentProviderService->findByCode($request->validated()['payment_method']);
+        // dd([$saleOrder,$paymentProvider]);
         $data = [
             'user' => Auth::user(),
-            'categories' => $this->catService->getAllActive(),
-            'brands' => $this->brService->getAllActive(),
-            'products' => $this->prService->getAllActive(),
-            'so_number' => IdGenerator::generate(['table' => 'sales', 'field' => 'sale_ref', 'length' => 11, 'prefix' => 'SO' . date('ym').'-']),
-            'locations' => $this->locService->getAllActive(),
+            'sale_order' => $saleOrder,
+            'payment_method' => $paymentMethod,
+            'so_number' => $saleOrder->sale_ref,
             'payment_providers' => $this->paymentProviderService->getAllActive(),
         ];
-        return Inertia::render('sales/POS', $data)->with('success', 'Provider created successfully.');
+        return Inertia::render('sales/POSPaymentPage', $data)->with('success', 'Provider created successfully.');
+    }
+
+    public function payment(){
+
     }
 }
