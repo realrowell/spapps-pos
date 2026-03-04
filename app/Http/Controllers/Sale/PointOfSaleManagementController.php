@@ -47,7 +47,7 @@ class PointOfSaleManagementController extends Controller
         // dd([$saleOrder,$paymentProvider]);
         $data = [
             'user' => Auth::user(),
-            'sale_order' => $saleOrder,
+            'sale_order' => $saleOrderService->getById($saleOrder->id),
             'payment_method' => $paymentMethod,
             'so_number' => $saleOrder->sale_ref,
             'payment_providers' => $this->paymentProviderService->getAllActive(),

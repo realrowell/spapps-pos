@@ -29,12 +29,12 @@ const { user, so_number, sale_order, payment_method, payment_providers } = defin
 
 console.log(sale_order);
 
-// const formatToCurrency = (value: number) => {
-//     return new Intl.NumberFormat('en-PH', {
-//         style: 'currency',
-//         currency: 'PHP',
-//     }).format(value)
-// }
+const formatToCurrency = (value: number) => {
+    return new Intl.NumberFormat('en-PH', {
+        style: 'currency',
+        currency: 'PHP',
+    }).format(value)
+}
 </script>
 
 <template>
@@ -48,14 +48,14 @@ console.log(sale_order);
             </Link>
             <Button variant="outline">{{ user.username }}</Button>
         </div>
-        <div class="flex flex-row items-center w-full text-black">
+        <!-- <div class="flex flex-row items-center w-full text-black">
             {{ JSON.stringify(sale_order) }}
             {{ JSON.stringify(payment_method) }}
-        </div>
-        <div class="flex flex-row w-full items-start">
-            <div class="w-3/12 self-start">
+        </div> -->
+        <div class="flex flex-row w-full items-center justify-center pb-20">
+            <div class="w-3/10 self-center">
                 <form >
-                    <Card class="fixed right-4 top-20 w-[24%] gap-1">
+                    <Card class="  top-20 gap-1">
                         <CardHeader>
                             <CardTitle class="border-b pb-3 border-neutral-400">
                                 <div class="flex flex-row justify-between">
@@ -64,9 +64,39 @@ console.log(sale_order);
                                 </div>
                             </CardTitle>
                         </CardHeader>
-                        <CardContent class="flex flex-col gap-3 h-full overflow-y-auto max-h-[40vh] min-h-[40vh]">
-
-
+                        <CardContent class="flex flex-col gap-3 h-full overflow-y-auto ">
+                            <div v-for="item in sale_order.sale_items" :key="item.id" class="flex flex-row w-full">
+                                <img src="/images/default_product.jpg" alt="product image" class="fill w-1/4 aspect-square">
+                                <div class="flex flex-col w-full gap-3">
+                                    <div>
+                                        <p class="text-sm">{{ item.pr_name }}</p>
+                                        <p class="text-sm">{{ formatToCurrency(item.unit_price) }} x {{ item.qty }}</p>
+                                    </div>
+                                    <div class="flex flex-row gap-2">
+                                        <div class="text-sm">total: {{ formatToCurrency(item.line_total) }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex flex-col">
+                                <div class="flex flex-row justify-between w-full">
+                                    <span>Subtotal:</span>
+                                    <span>{{ formatToCurrency(sale_order.subtotal) }}</span>
+                                </div>
+                                <div class="flex flex-row justify-between">
+                                    <span>Discount: </span>
+                                    <span>
+                                        {{ formatToCurrency(sale_order.discount_amount) }}
+                                    </span>
+                                </div>
+                                <div class="flex flex-row justify-between pb-2">
+                                    <span>Tax (12%): </span>
+                                    <span>{{ formatToCurrency(sale_order.tax_amount) }}</span>
+                                </div>
+                                <div class="flex flex-row justify-between">
+                                    <span>Total Amount</span>
+                                    <span>{{ formatToCurrency(sale_order.total_amount) }}</span>
+                                </div>
+                            </div>
                         </CardContent>
                         <CardFooter class="flex flex-col gap-3">
 
