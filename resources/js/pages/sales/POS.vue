@@ -293,9 +293,9 @@ const formatToCurrency = (value: number) => {
                                     <!-- Add buttons to increase/decrease quantity -->
                                     <div class="flex flex-row justify-between max-w-full">
                                         <div class="flex flex-row gap-1 items-center">
-                                            <Button size="xs" variant="subtlePrimary" class="border border-(--app-primary-color)" @click="decreaseQty(item.pr_code)">-</Button>
+                                            <Button type="button" size="xs" variant="subtlePrimary" class="border border-(--app-primary-color)" @click="decreaseQty(item.pr_code)">-</Button>
                                             <span class="bg-neutral-100 px-3">{{ item.qty }}</span>
-                                            <Button size="xs" @click="addToCart({ pr_code: item.pr_code, pr_name: item.pr_name, prices: [{ price_type: 'retail', price: item.price }] })">+</Button>
+                                            <Button type="button" size="xs" @click="addToCart({ pr_code: item.pr_code, pr_name: item.pr_name, prices: [{ price_type: 'retail', price: item.price }] })">+</Button>
                                         </div>
                                         <span class="text-(--app-primary-color)">{{ formatToCurrency(item.total) }}</span>
                                     </div>

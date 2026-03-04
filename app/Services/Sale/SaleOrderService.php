@@ -47,6 +47,10 @@ class SaleOrderService extends \App\Services\BaseService
         return Sale::find($id);
     }
 
+    public function getById(string $id){
+        return Sale::where('id', $id)->with(['sale_items'])->first();
+    }
+
     /**
      * Create new category.
      */

@@ -1,3 +1,5 @@
+import type { SaleItem } from "./sale-item"
+
 export interface Sale{
     sale_ref: string,
     trans_type: string,
@@ -11,5 +13,7 @@ export interface Sale{
     store_id: number,
     completed_at: Date,
     parent_sale_id: number,
-    created_at: Date
+    created_at: Date,
+
+    sale_items?: SaleItem[]
 }
