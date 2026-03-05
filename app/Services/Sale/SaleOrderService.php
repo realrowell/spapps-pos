@@ -2,7 +2,6 @@
 
 namespace App\Services\Sale;
 
-use App\Models\PaymentProvider;
 use App\Models\Product;
 use App\Models\PrPrice;
 use App\Models\Sale;
@@ -60,7 +59,6 @@ class SaleOrderService extends \App\Services\BaseService
 
             // Example business logic
             $products = $this->getSaleItems($data['products']);
-            $payment_provider = $this->getPaymentMethod($data['payment_method']);
 
             $subtotal = array_sum(array_column($products, 'line_total'));
             $tax_amount = $subtotal * 0.12; // Assuming a fixed tax rate
@@ -115,10 +113,6 @@ class SaleOrderService extends \App\Services\BaseService
                 'line_total' => $pr_price->price * $item['qty'],
             ];
         }, $products);
-    }
-
-    private function getPaymentMethod($provider){
-        return PaymentProvider::where('provider_code', $provider)->first();
     }
 
     /**

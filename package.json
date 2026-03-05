@@ -35,6 +35,7 @@
     },
     "dependencies": {
         "@inertiajs/vue3": "^2.3.7",
+        "@tailwindcss/line-clamp": "^0.4.4",
         "@tailwindcss/typography": "^0.5.19",
         "@tanstack/vue-table": "^8.21.3",
         "@tiptap/extension-bullet-list": "^3.20.0",

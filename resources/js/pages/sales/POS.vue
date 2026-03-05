@@ -53,7 +53,7 @@ interface CartItem {
 const cartForm = useForm({
     products: [] as CartItem[],
     net_total: 0,
-    payment_method: '' as PaymentProvider['provider_code'] | '',
+    // payment_method: '' as PaymentProvider['provider_code'] | '',
     so_number: so_number
 })
 
@@ -121,9 +121,9 @@ const cartSubmit = () => {
     })
 }
 
-function selectPaymentProvider(provider_code: string) {
-    cartForm.payment_method = cartForm.payment_method === provider_code ? '' : provider_code
-}
+// function selectPaymentProvider(provider_code: string) {
+//     cartForm.payment_method = cartForm.payment_method === provider_code ? '' : provider_code
+// }
 
 // console.log(payment_providers)
 // const products = computed(() => {
@@ -222,18 +222,18 @@ const formatToCurrency = (value: number) => {
                         <div
                             v-for="product in products"
                             :key="product.pr_code"
-                            class="w-1/4 p-1"
+                            class="w-1/5 p-1"
                         >
-                            <Card class="">
+                            <Card class="gap-2 h-full">
                                 <CardHeader >
                                     <!-- <AspectRatio :ratio="16 / 9" class="w-full">
                                         <img src="/images/default_product.jpg" alt="product image" fit class="fit">
                                     </AspectRatio> -->
-                                    <CardTitle class="truncate">{{ product.pr_name }}</CardTitle>
-                                    <CardDescription class="truncate">{{ product.pr_short_desc ?? '...'  }}</CardDescription>
+                                    <CardTitle class="line-clamp-2 text-sm">{{ product.pr_name }}</CardTitle>
+                                    <!-- <CardDescription class="truncate">{{ product.pr_short_desc ?? '...'  }}</CardDescription> -->
                                 </CardHeader>
                                 <CardContent class="flex flex-col gap-3">
-                                    <div class="flex flex-col">
+                                    <div class="flex flex-col text-sm">
                                         <p
                                             v-for="price in product.prices"
                                             :key="price.price_code">
@@ -279,7 +279,7 @@ const formatToCurrency = (value: number) => {
                                 </div>
                             </CardTitle>
                         </CardHeader>
-                        <CardContent class="flex flex-col gap-3 h-full overflow-y-auto max-h-[40vh] min-h-[40vh]">
+                        <CardContent class="flex flex-col gap-3 h-full overflow-y-auto max-h-[45vh] min-h-[45vh]">
                             <div v-if="cartForm.products.length === 0" class="text-center text-gray-500">
                                 Cart is empty
                             </div>
@@ -326,7 +326,7 @@ const formatToCurrency = (value: number) => {
                                 </div>
                             </div>
                             <div class="flex flex-col gap-3 w-full">
-                                <Label>Payment Method</Label>
+                                <!-- <Label>Payment Method</Label>
                                 <div class="flex gap-1 overflow-x-auto pb-2">
                                     <div
                                         v-for="provider in payment_providers"
@@ -341,9 +341,17 @@ const formatToCurrency = (value: number) => {
                                             {{ provider.provider_name }}
                                         </span>
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
                             <Button
+                                variant="subtlePrimary"
+                                size="lg"
+                                type="button" :disabled="cartForm.processing" class="w-full border border-(--app-primary-color)">
+                                <Spinner v-if="cartForm.processing" />
+                                Add Discount
+                            </Button>
+                            <Button
+                                size="lg"
                                 type="submit" :disabled="cartForm.processing" class="w-full">
                                 <Spinner v-if="cartForm.processing" />
                                 Proceed Payment

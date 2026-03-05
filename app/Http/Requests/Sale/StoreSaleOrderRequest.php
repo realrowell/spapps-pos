@@ -25,7 +25,7 @@ class StoreSaleOrderRequest extends FormRequest
             'products' => ['required', 'array'],
             'products.*.pr_code' => ['required', 'exists:products,pr_code'],
             'products.*.qty' => ['required', 'integer', 'min:1'],
-            'payment_method' => ['required', 'exists:payment_providers,provider_code'],
+            // 'payment_method' => ['required', 'exists:payment_providers,provider_code'],
             'so_number' => 'nullable|string'
         ];
     }

@@ -41,14 +41,12 @@ class PointOfSaleManagementController extends Controller
     }
 
     public function store(StoreSaleOrderRequest $request, SaleOrderService $saleOrderService){
-        // dd($request->validated()['payment_method']);
         $saleOrder = $saleOrderService->create($request->validated());
-        $paymentMethod = $this->paymentProviderService->findByCode($request->validated()['payment_method']);
-        // dd([$saleOrder,$paymentProvider]);
+        // $paymentMethod = $this->paymentProviderService->findByCode($request->validated()['payment_method']);
         $data = [
             'user' => Auth::user(),
             'sale_order' => $saleOrderService->getById($saleOrder->id),
-            'payment_method' => $paymentMethod,
+            // 'payment_method' => $paymentMethod,
             'so_number' => $saleOrder->sale_ref,
             'payment_providers' => $this->paymentProviderService->getAllActive(),
         ];
