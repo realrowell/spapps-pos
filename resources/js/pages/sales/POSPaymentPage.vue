@@ -58,6 +58,18 @@ function handlePaymentInput(value: number){
 function selectPaymentProvider(provider_code: string) {
     paymentForm.payment_method = paymentForm.payment_method === provider_code ? '' : provider_code
 }
+
+function handleKeyup(event: any) {
+    if ((event.key >= '0' && event.key <= '9')){
+        paymentForm.payment = paymentForm.payment+event.key
+    }
+    if(event.key === 'Backspace'){
+        paymentForm.payment = Math.floor(paymentForm.payment/ 10)
+    }
+    if(event.key === 'Delete'){
+        paymentForm.payment = 0
+    }
+}
 </script>
 
 <template>
@@ -161,54 +173,64 @@ function selectPaymentProvider(provider_code: string) {
                                 v-model="paymentForm.external_transaction_id"
                                 ></Input>
                             </div>
-                            <div class="flex flex-row gap-3">
-                                <Card class="bg-(--app-primary-color) w-1/2">
-                                    <CardContent class="text-white flex flex-row justify-between text-2xl">
-                                        <span>Cash due: </span>
-                                        <span>{{ formatToCurrency(sale_order.total_amount) }}</span>
-                                    </CardContent>
-                                </Card>
-                                <Card class="border-(--app-primary-color) w-1/2">
-                                    <CardContent class=" flex flex-row justify-between text-2xl h-full">
-                                        <span>Tendered: </span>
-                                        <span>{{ formatToCurrency(paymentForm.payment) }}</span>
-                                    </CardContent>
-                                </Card>
-                            </div>
-                            <div class="flex flex-col bg-neutral-200 p-2 rounded-xl">
-                                <div class="flex flex-row gap-1">
-                                    <Button
-                                        type="button"
-                                        variant="light"
-                                        class="text-2xl p-10"
-                                        @click="handlePaymentInput(1)"
-                                    >
-                                        1
-                                    </Button>
-                                    <Button
-                                        type="button"
-                                        variant="light"
-                                        class="text-2xl p-10"
-                                        @click="handlePaymentInput(2)"
-                                    >
-                                        2
-                                    </Button>
-                                    <Button
-                                        type="button"
-                                        variant="light"
-                                        class="text-2xl p-10"
-                                        @click="handlePaymentInput(3)"
-                                    >
-                                        3
-                                    </Button>
-                                    <Button
-                                        type="button"
-                                        variant="light"
-                                        class="text-2xl p-10"
-                                        @click="handlePaymentInput(4)"
-                                    >
-                                        4
-                                    </Button>
+                            <div class="flex flex-col gap-3" @keyup="handleKeyup" tabindex="0">
+                                <div class="flex flex-row gap-3">
+                                    <Card class="bg-(--app-primary-color) w-1/2">
+                                        <CardContent class="text-white flex flex-row justify-between text-2xl">
+                                            <span>Cash due: </span>
+                                            <span>{{ formatToCurrency(sale_order.total_amount) }}</span>
+                                        </CardContent>
+                                    </Card>
+                                    <Card class="border-(--app-primary-color) w-1/2">
+                                        <CardContent class=" flex flex-row justify-between text-2xl h-full">
+                                            <span>Tendered: </span>
+                                            <span>{{ formatToCurrency(paymentForm.payment) }}</span>
+                                        </CardContent>
+                                    </Card>
+                                </div>
+                                <div class="flex flex-col bg-neutral-200 p-2 rounded-xl">
+                                    <div class="grid grid-cols-5 gap-1 ">
+                                        <Button
+                                            type="button"
+                                            variant="light"
+                                            class="text-2xl p-10 "
+                                            @click="handlePaymentInput(1)"
+                                        >
+                                            1
+                                        </Button>
+                                        <Button
+                                            type="button"
+                                            variant="light"
+                                            class="text-2xl p-10 "
+                                            @click="handlePaymentInput(2)"
+                                        >
+                                            2
+                                        </Button>
+                                        <Button
+                                            type="button"
+                                            variant="light"
+                                            class="text-2xl p-10 "
+                                            @click="handlePaymentInput(3)"
+                                        >
+                                            3
+                                        </Button>
+                                        <Button
+                                            type="button"
+                                            variant="light"
+                                            class="text-2xl p-10 "
+                                            @click="handlePaymentInput(4)"
+                                        >
+                                            4
+                                        </Button>
+                                        <Button
+                                            type="button"
+                                            variant="light"
+                                            class="text-2xl p-10 "
+                                            @click="handlePaymentInput(100)"
+                                        >
+                                            P100
+                                        </Button>
+                                    </div>
                                 </div>
                             </div>
                         </CardContent>
