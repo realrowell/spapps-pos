@@ -12,6 +12,7 @@ use App\Services\Inventory\LocationService;
 use App\Services\Inventory\ProductService;
 use App\Services\Sale\ModeOfPaymentService;
 use App\Services\Sale\PaymentProviderService;
+use App\Services\Sale\SaleOrderService;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -31,8 +32,8 @@ class SalePageController extends Controller
         CategoryService $catService,
         ProductService $prService,
         BrandService $brService,
-        LocationService $locService)
-    {
+        LocationService $locService
+    ) {
         $this->mopService = $mopService;
         $this->paymentProviderService = $paymentProviderService;
         $this->catService = $catService;
@@ -41,34 +42,39 @@ class SalePageController extends Controller
         $this->locService = $locService;
     }
 
-    public function SalesPage(){
-        return Inertia::render('sales/Sales');
+    public function SalesPage(SaleOrderService $service)
+    {
+        $data=[
+            'sales' => $service->getAll(),
+        ];
+        return Inertia::render('sales/Sales', $data);
     }
 
-    public function PointOfSale(){
+    public function PointOfSale()
+    {
         $data = [
             'user' => Auth::user(),
             'categories' => $this->catService->getAllActive(),
             'brands' => $this->brService->getAllActive(),
             'products' => $this->prService->getAllActive(),
-            'so_number' => IdGenerator::generate(['table' => 'sales', 'field' => 'sale_ref', 'length' => 11, 'prefix' => 'SO' . date('ym').'-']),
+            'so_number' => IdGenerator::generate(['table' => 'sales', 'field' => 'sale_ref', 'length' => 11, 'prefix' => 'SO' . date('ym') . '-']),
             'locations' => $this->locService->getAllActive(),
             'payment_providers' => $this->paymentProviderService->getAllActive(),
         ];
         return Inertia::render('sales/POS', $data);
     }
 
-    public function PointOfSalePayment(){
+    public function PointOfSalePayment() {}
 
-    }
-
-    public function ModeOfPaymentsPage(){
+    public function ModeOfPaymentsPage()
+    {
         $data = [
             'mops' => $this->mopService->getAll(),
         ];
         return Inertia::render('sales/MOPs', $data);
     }
-    public function MOPCreate(){
+    public function MOPCreate()
+    {
         $data = [
             'generatedCode' => IdGenerator::generate(['table' => 'mode_of_payments', 'field' => 'mop_code', 'length' => 6, 'prefix' => str()->random(5)]),
             'typeOptions' => ModeOfPayment::mopTypeOptions(),
@@ -76,16 +82,18 @@ class SalePageController extends Controller
         return Inertia::render('sales/MOPCreate', $data);
     }
 
-    public function PaymentProvidersPage(){
+    public function PaymentProvidersPage()
+    {
         $data = [
             'payment_providers' => $this->paymentProviderService->getAll(),
         ];
         return Inertia::render('sales/PaymentProviders', $data);
     }
 
-    public function PaymentProvidersCreate(){
+    public function PaymentProvidersCreate()
+    {
         $data = [
-            'generatedCode' => IdGenerator::generate(['table' => 'payment_providers', 'field' => 'provider_code', 'length' => 9, 'prefix' => 'PROV-'.str()->random(3)]),
+            'generatedCode' => IdGenerator::generate(['table' => 'payment_providers', 'field' => 'provider_code', 'length' => 9, 'prefix' => 'PROV-' . str()->random(3)]),
             'mops' => $this->mopService->getAllActive(),
         ];
         return Inertia::render('sales/PaymentProviderCreate', $data);

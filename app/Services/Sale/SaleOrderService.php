@@ -50,6 +50,10 @@ class SaleOrderService extends \App\Services\BaseService
         return Sale::where('id', $id)->with(['sale_items'])->first();
     }
 
+    public function getByRef($ref){
+        return Sale::where('sale_ref', $ref)->with(['sale_items'])->first();
+    }
+
     /**
      * Create new category.
      */
@@ -60,15 +64,17 @@ class SaleOrderService extends \App\Services\BaseService
             // Example business logic
             $products = $this->getSaleItems($data['products']);
 
-            $subtotal = array_sum(array_column($products, 'line_total'));
-            $tax_amount = $subtotal * 0.12; // Assuming a fixed tax rate
-            $total_amount = $subtotal + $tax_amount;
+            $sum_of_products = array_sum(array_column($products, 'line_total'));
+            $discount_amount = 500;
+            $tax_amount = ($sum_of_products - $discount_amount) * 0.12; // Assuming a fixed tax rate
+            $subtotal_excle_tax = $sum_of_products - $tax_amount;
+            $total_amount = ($subtotal_excle_tax + $tax_amount) - $discount_amount;
 
             $sale = Sale::create([
                 'sale_ref' => $data['so_number'],
                 'trans_type' => 'sale',
-                'subtotal' => $subtotal,
-                'discount_amount' => 0,
+                'subtotal' => $subtotal_excle_tax,
+                'discount_amount' => $discount_amount,
                 'tax_amount' => $tax_amount,
                 'total_amount' => $total_amount,
                 'status' => 'draft',
@@ -92,8 +98,6 @@ class SaleOrderService extends \App\Services\BaseService
                     'line_total' => $products[$i]['line_total']
                 ]);
             }
-
-            Log::info('Sale products retrieved', ['sale' => $sale, 'sale_items' => $sale_item]);
             return $sale;
         });
     }
@@ -113,6 +117,18 @@ class SaleOrderService extends \App\Services\BaseService
                 'line_total' => $pr_price->price * $item['qty'],
             ];
         }, $products);
+    }
+
+    public function updateStatus(Sale $sale, string $status): Sale
+    {
+        return $this->transaction(function () use ($sale, $status) {
+
+            $sale->update([
+                'status' => $status
+            ]);
+
+            return $sale->refresh();
+        });
     }
 
     /**

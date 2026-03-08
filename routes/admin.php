@@ -59,6 +59,8 @@ Route::prefix('sale')->middleware('auth')->controller(SalePageController::class)
 Route::prefix('sale')->name('sale-')->group(function () {
     Route::post('mode-of-payments/store', [ModeOfPaymentsManagementController::class, 'store'])->name('mode-of-payments-store');
     Route::post('payment-providers/store', [PaymentProviderManagementController::class, 'store'])->name('payment-providers-store');
-    Route::post('point-of-sale/create', [PointOfSaleManagementController::class, 'store'])->name('point-of-sale-create');
-    Route::post('point-of-sale/payment', [PointOfSaleManagementController::class, 'payment'])->name('point-of-sale-payment');
+    Route::post('point-of-sale/create-sale-order', [PointOfSaleManagementController::class, 'create'])->name('point-of-sale-create');
+    Route::get('point-of-sale/payment/{saleOrder}', [PointOfSaleManagementController::class, 'showPayment'])->name('point-of-sale-payment-show');
+    Route::post('point-of-sale/complete-payment', [PointOfSaleManagementController::class, 'createPayment'])->name('point-of-sale-create-payment');
+    Route::post('point-of-sale/void-sale/{saleOrderId}', [PointOfSaleManagementController::class, 'voidSaleOrder'])->name('point-of-sale-void-sale');
 });

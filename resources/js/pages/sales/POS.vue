@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import { Head, Link, useForm, router, usePage } from '@inertiajs/vue3';
 import { ScanLine, EllipsisVertical } from 'lucide-vue-next';
 import Button from '@/components/ui/button/Button.vue';
 import {
@@ -12,14 +12,20 @@ import {
     CardFooter
  } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import Spinner from '@/components/ui/spinner/Spinner.vue';
 import { Label } from '@/components/ui/label';
+import formatToCurrency from '@/composables/point-of-sale/formatToCurrency';
 import { dashboard, salePointOfSaleCreate } from '@/routes';
 import type { User } from '@/types';
 import type { PrBrand } from '@/types/inventories/brand';
 import type { PrCategory } from '@/types/inventories/pr-category';
 import type { Product } from '@/types/inventories/product';
 import type { PaymentProvider } from '@/types/sale/payment-provider';
+import { toast } from 'vue-sonner';
+import { Toaster } from '@/components/ui/sonner'
+import { useFlashToast } from '@/composables/useFlashToast'
 
+useFlashToast()
 
 const { user, categories, brands, so_number, payment_providers } = defineProps<{
     user: User
@@ -138,7 +144,6 @@ const cartSubmit = () => {
 //     return filteredProducts
 // })
 
-
 const toggleCategory = (id: string) => {
     console.log(id)
     searchForm.category =
@@ -148,17 +153,11 @@ const toggleBrand = (id: string) => {
     searchForm.brand =
         searchForm.brand === id ? '' : id
 }
-
-const formatToCurrency = (value: number) => {
-    return new Intl.NumberFormat('en-PH', {
-        style: 'currency',
-        currency: 'PHP',
-    }).format(value)
-}
 </script>
 
 <template>
     <Head title="Point of Sale" />
+    <Toaster richColors position="bottom-center"/>
     <div
         class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4"
     >
@@ -166,7 +165,7 @@ const formatToCurrency = (value: number) => {
             <Link :href="dashboard().url">
                 <Button variant="link">&larr; Dashboard</Button>
             </Link>
-            <Button variant="outline">{{ user.username }}</Button>
+            <Button variant="outline" >{{ user.username }}</Button>
         </div>
         <div class="flex flex-row w-full items-start">
             <div class="w-9/12 p-3 flex flex-col gap-3 ">
@@ -268,9 +267,9 @@ const formatToCurrency = (value: number) => {
 
                 </div>
             </div>
-            <div class="w-3/12 self-start">
+            <div class="w-3/12  sticky top-10">
                 <form @submit.prevent="cartSubmit">
-                    <Card class="fixed right-4 top-20 w-[24%] gap-1">
+                    <Card class="  gap-1">
                         <CardHeader>
                             <CardTitle class="border-b pb-3 border-neutral-400">
                                 <div class="flex flex-row justify-between">

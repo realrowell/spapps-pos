@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Sale;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Sale\StoreSaleOrderRequest;
+use App\Http\Requests\Sale\StoreSalePaymentRequest;
 use App\Services\Sale\SaleOrderService;
 use Illuminate\Support\Facades\Auth;
 use App\Services\Inventory\BrandService;
@@ -12,6 +13,7 @@ use App\Services\Inventory\LocationService;
 use App\Services\Inventory\ProductService;
 use App\Services\Sale\ModeOfPaymentService;
 use App\Services\Sale\PaymentProviderService;
+use App\Services\Sale\SalePaymentService;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Inertia\Inertia;
 
@@ -40,20 +42,38 @@ class PointOfSaleManagementController extends Controller
         $this->locService = $locService;
     }
 
-    public function store(StoreSaleOrderRequest $request, SaleOrderService $saleOrderService){
+    public function create(StoreSaleOrderRequest $request, SaleOrderService $saleOrderService){
         $saleOrder = $saleOrderService->create($request->validated());
-        // $paymentMethod = $this->paymentProviderService->findByCode($request->validated()['payment_method']);
-        $data = [
-            'user' => Auth::user(),
-            'sale_order' => $saleOrderService->getById($saleOrder->id),
-            // 'payment_method' => $paymentMethod,
-            'so_number' => $saleOrder->sale_ref,
-            'payment_providers' => $this->paymentProviderService->getAllActive(),
-        ];
-        return Inertia::render('sales/POSPaymentPage', $data)->with('success', 'Provider created successfully.');
+
+        // Redirect to GET route instead of rendering directly
+        return redirect()->route('sale-point-of-sale-payment-show', $saleOrder->sale_ref)->with('success', 'Sale Order created successfully.');
     }
 
-    public function payment(){
+    public function showPayment(SaleOrderService $saleOrderService, $saleOrderId){
+        $data = [
+            'user' => Auth::user(),
+            'sale_order' => $saleOrderService->getByRef($saleOrderId),
+            'so_number' => $saleOrderId,
+            'payment_providers' => $this->paymentProviderService->getAllActive(),
+        ];
+        return Inertia::render('sales/POSPaymentPage', $data);
+    }
 
+    public function createPayment(StoreSalePaymentRequest $request, SalePaymentService $salePaymentService){
+        $salePayment = $salePaymentService->create($request->validated());
+        $data = [
+            'salePayment' => $salePayment
+        ];
+        return redirect()->route('sale-pos')->with('success', 'Payment Successful.');
+    }
+
+    public function voidSaleOrder($saleOrderId, SaleOrderService $saleOrderService){
+        $saleOrder = $saleOrderService->getByRef($saleOrderId);
+        if (!$saleOrder) {
+            return redirect()->route('sale-pos')->with('error', 'Sale Order not found.');
+        }
+        $voidedSaleOrder = $saleOrderService->updateStatus($saleOrder, 'void');
+
+        return redirect()->route('sale-pos')->with('success', $voidedSaleOrder);
     }
 }

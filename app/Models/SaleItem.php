@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 class SaleItem extends Model
 {
@@ -25,8 +26,9 @@ class SaleItem extends Model
     {
         parent::boot();
         self::creating(function ($model) {
-            // $prefix = 'trp'.date(format: 'ym');
-            // $model->id = IdGenerator::generate(['table' => 'trans_items', 'length' => 30, 'prefix' => $prefix . str()->random(20)]);
+            if (empty($model->public_id)) {
+                $model->public_id = hash('sha256', Str::uuid());
+            }
         });
     }
 }
