@@ -12,6 +12,7 @@ use App\Services\Inventory\LocationService;
 use App\Services\Inventory\ProductService;
 use App\Services\Sale\ModeOfPaymentService;
 use App\Services\Sale\PaymentProviderService;
+use App\Services\Sale\SaleOrderService;
 use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -41,9 +42,12 @@ class SalePageController extends Controller
         $this->locService = $locService;
     }
 
-    public function SalesPage()
+    public function SalesPage(SaleOrderService $service)
     {
-        return Inertia::render('sales/Sales');
+        $data=[
+            'sales' => $service->getAll(),
+        ];
+        return Inertia::render('sales/Sales', $data);
     }
 
     public function PointOfSale()

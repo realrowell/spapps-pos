@@ -21,7 +21,8 @@ class Sale extends Model
         'status',
         'transacted_by',
         'user_id',
-        'completed_at'
+        'completed_at',
+        'payment_status'
     ];
 
     // public $incrementing = false;
@@ -43,6 +44,9 @@ class Sale extends Model
     public const STATUS_COMPLETED = 'completed';
     public const STATUS_VOIDED = 'voided';
     public const STATUS_PARTIAL = 'partial';
+    public const PAYMENT_UNPAID = 'unpaid';
+    public const PAYMENT_PARTIAL = 'partial';
+    public const PAYMENT_PAID = 'paid';
 
     public static function typeOptions()
     {
@@ -77,7 +81,18 @@ class Sale extends Model
         ];
     }
 
+    public static function paymentStatusOptions(){
+        return[
+            self::PAYMENT_UNPAID => 'Unpaid',
+            self::PAYMENT_PARTIAL => 'Partial',
+            self::PAYMENT_PAID => 'Paid'
+        ];
+    }
+
     public function sale_items(){
         return $this->hasMany(SaleItem::class, 'sale_id', 'id');
+    }
+    public function sale_payments(){
+        return $this->hasMany(SalePayment::class, 'sale_id', 'id');
     }
 }

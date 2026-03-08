@@ -5,6 +5,8 @@ import { Head } from '@inertiajs/vue3';
 import AppLayout from '@/layouts/AppLayout.vue';
 import { saleSales } from '@/routes';
 import { type BreadcrumbItem } from '@/types';
+import SaleTable from './partials/SaleTable.vue';
+import { Sale } from '@/types/sale/sale';
 // import BrandTable from './partials/BrandTable.vue';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -13,15 +15,10 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: saleSales().url,
     },
 ];
-// interface Brand {
-//     id: string
-//     brand_code: string
-//     brand_name: string
-//     is_active: string
-// }
-// const { brands } = defineProps<{
-//     brands: Brand[]
-// }>()
+
+const { sales } = defineProps<{
+    sales: Sale[]
+}>()
 </script>
 
 <template>
@@ -39,7 +36,7 @@ const breadcrumbs: BreadcrumbItem[] = [
             <div
                 class="relative min-h-screen flex-1 rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border bg-card"
             >
-                <!-- <BrandTable :data="brands"/> -->
+                <SaleTable :data="sales"/>
             </div>
         </div>
     </AppLayout>

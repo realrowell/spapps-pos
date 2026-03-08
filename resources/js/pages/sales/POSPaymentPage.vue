@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { Head, Link, useForm } from '@inertiajs/vue3';
-// import { ScanLine, EllipsisVertical } from 'lucide-vue-next';
+import { Head, Link, useForm, router } from '@inertiajs/vue3';
+import { Delete } from 'lucide-vue-next';
+import Spinner from '@/components/ui/spinner/Spinner.vue';
 import Button from '@/components/ui/button/Button.vue';
 import {
     Card,
@@ -11,52 +12,71 @@ import {
     CardDescription,
     CardFooter
  } from '@/components/ui/card';
-// import { Input } from '@/components/ui/input';
-// import { Label } from '@/components/ui/label';
-import { dashboard } from '@/routes';
+import Input from '@/components/ui/input/Input.vue';
+import Label from '@/components/ui/label/Label.vue';
+import formatToCurrency from '@/composables/point-of-sale/formatToCurrency';
+import { dashboard, salePointOfSaleCreatePayment, salePointOfSaleVoidSale } from '@/routes';
 import type { User } from '@/types';
 import type { PaymentProvider } from '@/types/sale/payment-provider';
 import type { Sale } from '@/types/sale/sale';
-import Label from '@/components/ui/label/Label.vue';
-import Input from '@/components/ui/input/Input.vue';
+import { toast } from 'vue-sonner';
+import Toaster from '@/components/Toaster.vue';
 
 
-const { user, so_number, sale_order, payment_method, payment_providers } = defineProps<{
+const { user, so_number, sale_order, payment_providers } = defineProps<{
     user: User
     sale_order: Sale
     so_number: string
-    payment_method: PaymentProvider
     payment_providers: PaymentProvider[]
 }>()
 
 
 const paymentForm = useForm({
-    payment: 0,
+    payment: 0 as number,
     payment_method: '' as PaymentProvider['provider_code'] | '',
-    so_number: so_number,
     sale_id: sale_order.sale_ref,
     external_transaction_id: '',
     reference_no: '',
     status: 'pending',
 })
 
-console.log(sale_order);
-
-const formatToCurrency = (value: number) => {
-    return new Intl.NumberFormat('en-PH', {
-        style: 'currency',
-        currency: 'PHP',
-    }).format(value)
+const paymentSubmit = () => {
+    paymentForm.post(salePointOfSaleCreatePayment().url, {
+        onSuccess: () => {
+            paymentForm.reset()
+        }
+    })
+}
+const voidSale = () => {
+    router.post(
+        salePointOfSaleVoidSale(sale_order.sale_ref),
+        {},
+        {
+            onSuccess: () => {
+                console.log('Sale voided')
+            }
+        }
+    )
 }
 
-function handlePaymentInput(value: number){
-    if(value){
-        paymentForm.payment = paymentForm.payment + value
-    }
-}
 
 function selectPaymentProvider(provider_code: string) {
     paymentForm.payment_method = paymentForm.payment_method === provider_code ? '' : provider_code
+}
+
+function handlePaymentInput(value: any ){
+    if(value >= '0' && value <= '9'){
+        paymentForm.payment = parseInt(paymentForm.payment +  value.toString())
+    }
+    if(value == 100 || value == 500 || value == 1000){
+        paymentForm.payment = parseInt(paymentForm.payment + value)
+    }
+    if(value === 'Backspace'){
+        paymentForm.payment = Math.floor(paymentForm.payment/ 10)
+    }
+    if(value == 'clear'){
+        paymentForm.payment = 0
+    }
 }
 
 function handleKeyup(event: any) {
@@ -70,10 +90,25 @@ function handleKeyup(event: any) {
         paymentForm.payment = 0
     }
 }
+
+function showToast() {
+    toast.promise<{ name: string }>(
+    () =>
+      new Promise(resolve =>
+        setTimeout(() => resolve({ name: 'Event' }), 2000),
+      ),
+    {
+      loading: 'Loading...',
+      success: (data: { name: string }) => `${data.name} has been created`,
+      error: 'Error',
+    },
+  )
+}
 </script>
 
 <template>
     <Head title="Point of Sale - Payment" />
+    <Toaster />
     <div
         class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4"
     >
@@ -83,13 +118,9 @@ function handleKeyup(event: any) {
             </Link>
             <Button variant="outline">{{ user.username }}</Button>
         </div>
-        <!-- <div class="flex flex-row items-center w-full text-black">
-            {{ JSON.stringify(sale_order) }}
-            {{ JSON.stringify(payment_method) }}
-        </div> -->
         <div class="flex flex-row w-full items-start justify-center pb-20 gap-3">
             <div class="w-3/12 ">
-                <form >
+                <form @submit.prevent="voidSale">
                     <Card class="  top-20 gap-1">
                         <CardHeader>
                             <CardTitle class="border-b pb-3 border-neutral-400">
@@ -136,17 +167,17 @@ function handleKeyup(event: any) {
                         <CardFooter class="flex flex-col gap-3">
                             <Button
                                 class="w-full"
-                                type="button"
                                 variant="danger"
-                            >
+                                :disabled="paymentForm.processing">
+                                <Spinner v-if="paymentForm.processing" />
                                 Void
                             </Button>
                         </CardFooter>
                     </Card>
                 </form>
             </div>
-            <div class="w-5/10">
-                <form action="">
+            <div class="w-5/10 sticky top-10">
+                <form @submit.prevent="paymentSubmit">
                     <Card>
                         <CardHeader>
                             <Label>Payment Method</Label>
@@ -177,7 +208,7 @@ function handleKeyup(event: any) {
                                 <div class="flex flex-row gap-3">
                                     <Card class="bg-(--app-primary-color) w-1/2">
                                         <CardContent class="text-white flex flex-row justify-between text-2xl">
-                                            <span>Cash due: </span>
+                                            <span>Total due: </span>
                                             <span>{{ formatToCurrency(sale_order.total_amount) }}</span>
                                         </CardContent>
                                     </Card>
@@ -188,51 +219,88 @@ function handleKeyup(event: any) {
                                         </CardContent>
                                     </Card>
                                 </div>
-                                <div class="flex flex-col bg-neutral-200 p-2 rounded-xl">
-                                    <div class="grid grid-cols-5 gap-1 ">
+                                <div class="flex flex-row bg-neutral-200 gap-1 rounded-xl w-full p-2  ">
+                                    <div class="flex flex-col w-2/3 gap-1">
+                                        <div class="grid grid-cols-3 gap-1 ">
+                                            <div v-for="n in 9" :key="n" class="w-full">
+                                                <Button
+                                                    type="button"
+                                                    variant="light"
+                                                    class="text-2xl p-10 w-full"
+                                                    @click="handlePaymentInput(n.toString())"
+                                                >
+                                                    {{ n }}
+                                                </Button>
+                                            </div>
+                                            <Button
+                                                type="button"
+                                                variant="light"
+                                                class="text-2xl p-10 w-full"
+                                                @click="handlePaymentInput('clear')"
+                                            >
+                                                Clear
+                                            </Button>
+                                            <Button
+                                                type="button"
+                                                variant="light"
+                                                class="text-2xl p-10 w-full"
+                                                @click="handlePaymentInput(0)"
+                                            >
+                                                0
+                                            </Button>
+                                            <Button
+                                                size="icon-lg"
+                                                type="button"
+                                                variant="light"
+                                                class="text-2xl p-10 w-full"
+                                                @click="handlePaymentInput('Backspace')"
+                                            >
+                                                <Delete class="size-8"/>
+                                            </Button>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col w-1/3 gap-1 ">
                                         <Button
                                             type="button"
                                             variant="light"
-                                            class="text-2xl p-10 "
-                                            @click="handlePaymentInput(1)"
-                                        >
-                                            1
-                                        </Button>
-                                        <Button
-                                            type="button"
-                                            variant="light"
-                                            class="text-2xl p-10 "
-                                            @click="handlePaymentInput(2)"
-                                        >
-                                            2
-                                        </Button>
-                                        <Button
-                                            type="button"
-                                            variant="light"
-                                            class="text-2xl p-10 "
-                                            @click="handlePaymentInput(3)"
-                                        >
-                                            3
-                                        </Button>
-                                        <Button
-                                            type="button"
-                                            variant="light"
-                                            class="text-2xl p-10 "
-                                            @click="handlePaymentInput(4)"
-                                        >
-                                            4
-                                        </Button>
-                                        <Button
-                                            type="button"
-                                            variant="light"
-                                            class="text-2xl p-10 "
+                                            class="text-2xl p-10 w-full"
                                             @click="handlePaymentInput(100)"
                                         >
-                                            P100
+                                            100
+                                        </Button>
+                                        <Button
+                                            type="button"
+                                            variant="light"
+                                            class="text-2xl p-10 w-full"
+                                            @click="handlePaymentInput(500)"
+                                        >
+                                            500
+                                        </Button>
+                                        <Button
+                                            type="button"
+                                            variant="light"
+                                            class="text-2xl p-10 w-full"
+                                            @click="handlePaymentInput(1000)"
+                                        >
+                                            1000
+                                        </Button>
+                                        <Button
+                                            type="button"
+                                            variant="light"
+                                            class="text-2xl p-10 w-full"
+                                            @click="paymentForm.payment = sale_order.total_amount"
+                                        >
+                                            Exact Amount
                                         </Button>
                                     </div>
                                 </div>
                             </div>
+                            <Button
+                                size="lg"
+                                type="submit" :disabled="paymentForm.processing" class="w-full">
+                                <Spinner v-if="paymentForm.processing" />
+                                Complete Transaction
+                            </Button>
                         </CardContent>
                     </Card>
                 </form>
