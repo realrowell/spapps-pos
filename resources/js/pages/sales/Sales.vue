@@ -7,6 +7,7 @@ import { saleSales } from '@/routes';
 import { type BreadcrumbItem } from '@/types';
 import SaleTable from './partials/SaleTable.vue';
 import { Sale } from '@/types/sale/sale';
+import Card from '@/components/ui/card/Card.vue';
 // import BrandTable from './partials/BrandTable.vue';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -32,6 +33,38 @@ const { sales } = defineProps<{
                 <!-- <Link :href="inventoryBrandsCreate().url">
                     <Button variant="default" >Add Brand</Button>
                 </Link> -->
+            </div>
+            <div class="flex flex-row gap-3 ">
+                <Card class="p-4 flex-1">
+                    <div class="flex flex-col gap-3">
+                        <p class="text-sm text-muted-foreground">
+                            Transactions
+                        </p>
+                        <div class="text-2xl">
+                            {{ sales.length }}
+                        </div>
+                    </div>
+                </Card>
+                <Card class="p-4 flex-1">
+                    <div class="flex flex-col gap-3">
+                        <p class="text-sm text-muted-foreground">
+                            Sales
+                        </p>
+                        <div class="text-2xl">
+                            10,000
+                        </div>
+                    </div>
+                </Card>
+                <Card class="p-4 flex-1">
+                    <div class="flex flex-col gap-3">
+                        <p class="text-sm text-muted-foreground">
+                            Invoiced
+                        </p>
+                        <div class="text-2xl">
+                            {{ sales.length }}
+                        </div>
+                    </div>
+                </Card>
             </div>
             <div
                 class="relative min-h-screen flex-1 rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border bg-card"
