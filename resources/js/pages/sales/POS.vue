@@ -24,6 +24,18 @@ import type { PaymentProvider } from '@/types/sale/payment-provider';
 import { toast } from 'vue-sonner';
 import { Toaster } from '@/components/ui/sonner'
 import { useFlashToast } from '@/composables/useFlashToast'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import UnpaidTransactionDialog from './partials/UnpaidTransactionsDialog.vue'
+import { ref } from 'vue'
+
+const dialogOpen = ref(false)
 
 useFlashToast()
 
@@ -173,7 +185,19 @@ const toggleBrand = (id: string) => {
                     <Input id="Search" class="bg-white" v-model="searchForm.search" placeholder="Enter Product here.."></Input>
                     <Button>Search</Button>
                     <Button><ScanLine /></Button>
-                    <Button><EllipsisVertical /></Button>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger>
+                            <Button><EllipsisVertical /></Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                        <DropdownMenuItem @click="dialogOpen = true">
+                            Unpaid Transactions
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>Paid Transactions</DropdownMenuItem>
+                        <DropdownMenuItem>Voided Transactions</DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                    <UnpaidTransactionDialog v-model:open="dialogOpen"/>
                 </div>
                 <div class="flex flex-col gap-3 w-full overflow-x-auto">
                     <Label>Category</Label>

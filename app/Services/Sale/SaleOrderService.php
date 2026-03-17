@@ -9,7 +9,6 @@ use App\Models\SaleItem;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 class SaleOrderService extends \App\Services\BaseService
 {
