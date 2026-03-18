@@ -34,6 +34,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import UnpaidTransactionDialog from './partials/UnpaidTransactionsDialog.vue'
 import { ref } from 'vue'
+import type { Sale } from '@/types/sale/sale';
 
 const dialogOpen = ref(false)
 
@@ -46,6 +47,7 @@ const { user, categories, brands, so_number, payment_providers } = defineProps<{
     products: Product[]
     so_number: string
     payment_providers: PaymentProvider[]
+    sales: Sale[]
 }>()
 
 const searchForm = useForm({
@@ -197,7 +199,7 @@ const toggleBrand = (id: string) => {
                         <DropdownMenuItem>Voided Transactions</DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
-                    <UnpaidTransactionDialog v-model:open="dialogOpen"/>
+                    <UnpaidTransactionDialog v-model:open="dialogOpen" :sales="sales" />
                 </div>
                 <div class="flex flex-col gap-3 w-full overflow-x-auto">
                     <Label>Category</Label>

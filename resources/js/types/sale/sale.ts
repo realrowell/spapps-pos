@@ -1,4 +1,5 @@
 import type { SaleItem } from "./sale-item"
+import type { SalePayment } from "./sale-payment"
 
 export interface Sale{
     sale_ref: string,
@@ -15,5 +16,6 @@ export interface Sale{
     parent_sale_id: number,
     created_at: Date,
 
+    sale_payments?: SalePayment[]
     sale_items?: SaleItem[]
 }
