@@ -28,6 +28,14 @@ class SaleOrderService extends \App\Services\BaseService
     }
 
     /**
+     * Get all categories.
+     */
+    public function getAllUnpaid(): Collection
+    {
+        return Sale::where('status', 'draft')->orWhere('status','partial')->with(['sale_payments'])->get();
+    }
+
+    /**
      * Get paginated categories.
      */
     public function getPaginated(int $perPage = 15): LengthAwarePaginator

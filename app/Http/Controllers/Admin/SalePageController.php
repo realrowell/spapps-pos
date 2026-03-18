@@ -25,6 +25,7 @@ class SalePageController extends Controller
     private $prService;
     private $brService;
     private $locService;
+    private $saleService;
 
     public function __construct(
         ModeOfPaymentService $mopService,
@@ -32,7 +33,8 @@ class SalePageController extends Controller
         CategoryService $catService,
         ProductService $prService,
         BrandService $brService,
-        LocationService $locService
+        LocationService $locService,
+        SaleOrderService $saleService
     ) {
         $this->mopService = $mopService;
         $this->paymentProviderService = $paymentProviderService;
@@ -40,6 +42,7 @@ class SalePageController extends Controller
         $this->prService = $prService;
         $this->brService = $brService;
         $this->locService = $locService;
+        $this->saleService = $saleService;
     }
 
     public function SalesPage(SaleOrderService $service)
@@ -60,6 +63,7 @@ class SalePageController extends Controller
             'so_number' => IdGenerator::generate(['table' => 'sales', 'field' => 'sale_ref', 'length' => 11, 'prefix' => 'SO' . date('ym') . '-']),
             'locations' => $this->locService->getAllActive(),
             'payment_providers' => $this->paymentProviderService->getAllActive(),
+            'sales' => $this->saleService->getAllUnpaid(),
         ];
         return Inertia::render('sales/POS', $data);
     }
