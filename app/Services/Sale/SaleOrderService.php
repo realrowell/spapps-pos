@@ -32,7 +32,7 @@ class SaleOrderService extends \App\Services\BaseService
      */
     public function getAllUnpaid(): Collection
     {
-        return Sale::where('status', 'draft')->orWhere('status','partial')->with(['sale_payments'])->get();
+        return Sale::where('status', 'draft')->orWhere('status','partial')->with(['sale_payments', 'sale_items'])->get();
     }
 
     /**

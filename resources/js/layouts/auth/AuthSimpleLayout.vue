@@ -2,6 +2,7 @@
 import { Link } from '@inertiajs/vue3';
 import AppLogoIcon from '@/components/AppLogoIcon.vue';
 import { home } from '@/routes';
+import HeroLoginImage from '@/components/ui/HeroLoginImage.vue';
 
 defineProps<{
     title?: string;
@@ -11,10 +12,10 @@ defineProps<{
 
 <template>
     <div
-        class="flex min-h-svh flex-col items-center justify-center gap-6 bg-background p-6 md:p-10"
+        class="flex min-h-svh flex-col items-center justify-center gap-6 bg-background p-6 md:p-10 bg-black"
     >
-        <div class="w-full max-w-sm">
-            <div class="flex flex-col gap-8">
+        <div class="w-250 bg-white rounded-2xl flex flex-row">
+            <div class="flex flex-col gap-8 p-6 md:p-10">
                 <div class="flex flex-col items-center gap-4">
                     <Link
                         :href="home()"
@@ -37,6 +38,11 @@ defineProps<{
                     </div>
                 </div>
                 <slot />
+            </div>
+            <div class="flex flex-col self-stretch">
+                <div class="h-full">
+                    <HeroLoginImage />
+                </div>
             </div>
         </div>
     </div>

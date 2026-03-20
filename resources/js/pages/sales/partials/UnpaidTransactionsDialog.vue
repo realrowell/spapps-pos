@@ -24,6 +24,8 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import type { Sale } from '@/types/sale/sale';
 import formatToCurrency from '@/composables/point-of-sale/formatToCurrency';
+import { Link } from '@inertiajs/vue3'
+import { salePointOfSalePaymentShow } from '@/routes'
 
 const props = defineProps<{
   open: boolean
@@ -51,9 +53,10 @@ const emit = defineEmits(['update:open'])
                         <TableRow>
                             <TableHead class="w-25">Sale Ref.</TableHead>
                             <TableHead>Status</TableHead>
-                            <TableHead>Method</TableHead>
+                            <TableHead>Items</TableHead>
                             <TableHead>Unpaid Amount</TableHead>
                             <TableHead>Total Amount</TableHead>
+                            <TableHead>Timestamp</TableHead>
                             <TableHead class="text-right">Action</TableHead>
                         </TableRow>
                     </TableHeader>
@@ -61,8 +64,8 @@ const emit = defineEmits(['update:open'])
                         <TableRow v-for="sale in props.sales" :key="sale.sale_ref">
                             <TableCell class="font-medium">{{ sale.sale_ref }}</TableCell>
                             <TableCell>{{ sale.status }}</TableCell>
-                            <TableCell>{{ sale.sale_payments?.length }}</TableCell>
-                            <TableCell>
+                            <TableCell>{{ sale.sale_items?.length }}</TableCell>
+                            <TableCell class="bg-red-200 text-red-600">
                                 {{
                                     formatToCurrency(
                                     sale.total_amount - (
@@ -74,14 +77,27 @@ const emit = defineEmits(['update:open'])
                                 }}
                             </TableCell>
                             <TableCell>{{ formatToCurrency(sale.total_amount) }}</TableCell>
+                            <!-- <TableCell>{{ sale.created_at.toLocaleString() }}</TableCell> -->
+                            <TableCell>
+                                {{
+                                    new Intl.DateTimeFormat(undefined, {
+                                        day: 'numeric',
+                                        month: 'numeric',
+                                        year: 'numeric',
+                                        hour: "numeric",
+                                        minute: "numeric",
+                                        second: "numeric",
+                                    }).format(new Date(sale.created_at))
+                                }}
+                            </TableCell>
                             <TableCell class="text-right">
-                                <Button type="button" size="sm">Pay</Button>
+                                <Link :href="salePointOfSalePaymentShow(sale.sale_ref)"><Button type="button" size="sm">Pay</Button></Link>
                             </TableCell>
                         </TableRow>
                     </TableBody>
                     <TableFooter>
                         <TableRow>
-                            <TableCell colspan="3">
+                            <TableCell colspan="5">
                             Total
                             </TableCell>
                             <TableCell class="text-right">

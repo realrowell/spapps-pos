@@ -50,6 +50,23 @@ class PointOfSaleManagementController extends Controller
     }
 
     public function showPayment(SaleOrderService $saleOrderService, $saleOrderId){
+        $salePayment = $saleOrderService->getByRef($saleOrderId);
+        $saleOrder = $saleOrderService->getByRef($saleOrderId);
+
+        // if($salePayment != null){
+        //     if($salePayment->status === 'paid'){
+        //         return redirect()->route('sale-pos')->with('error', 'This sale order has already been paid.');
+        //     }
+        // } else {
+        //     return redirect()->route('sale-pos')->with('error', 'Sale order not found.');
+        // }
+
+        if($saleOrder != null && $saleOrder->status == 'completed'){
+            session()->flash('error', 'This sale order has already been paid.');
+            return redirect()->route('sale-pos');
+        }
+
+
         $data = [
             'user' => Auth::user(),
             'sale_order' => $saleOrderService->getByRef($saleOrderId),
