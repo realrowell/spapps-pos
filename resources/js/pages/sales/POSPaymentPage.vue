@@ -15,7 +15,7 @@ import {
 import Input from '@/components/ui/input/Input.vue';
 import Label from '@/components/ui/label/Label.vue';
 import formatToCurrency from '@/composables/point-of-sale/formatToCurrency';
-import { dashboard, salePointOfSaleCreatePayment, salePointOfSaleVoidSale } from '@/routes';
+import { dashboard, salePointOfSaleCreatePayment, salePointOfSaleVoidSale, salePos } from '@/routes';
 import type { User } from '@/types';
 import type { PaymentProvider } from '@/types/sale/payment-provider';
 import type { Sale } from '@/types/sale/sale';
@@ -113,8 +113,8 @@ function showToast() {
         class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4"
     >
         <div class="flex flex-row justify-between align-center">
-            <Link :href="dashboard().url">
-                <Button variant="link">&larr; Dashboard</Button>
+            <Link :href="salePos().url">
+                <Button variant="link">&larr; Point of Sale</Button>
             </Link>
             <Button variant="outline">{{ user.username }}</Button>
         </div>

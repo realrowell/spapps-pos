@@ -21,7 +21,6 @@ import type { PrBrand } from '@/types/inventories/brand';
 import type { PrCategory } from '@/types/inventories/pr-category';
 import type { Product } from '@/types/inventories/product';
 import type { PaymentProvider } from '@/types/sale/payment-provider';
-import { toast } from 'vue-sonner';
 import { Toaster } from '@/components/ui/sonner'
 import { useFlashToast } from '@/composables/useFlashToast'
 import {
@@ -36,9 +35,9 @@ import UnpaidTransactionDialog from './partials/UnpaidTransactionsDialog.vue'
 import { ref } from 'vue'
 import type { Sale } from '@/types/sale/sale';
 
-const dialogOpen = ref(false)
-
 useFlashToast()
+
+const dialogOpen = ref(false)
 
 const { user, categories, brands, so_number, payment_providers } = defineProps<{
     user: User
@@ -171,7 +170,7 @@ const toggleBrand = (id: string) => {
 
 <template>
     <Head title="Point of Sale" />
-    <Toaster richColors position="bottom-center"/>
+    <Toaster rich-colors position="bottom-center"/>
     <div
         class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4"
     >
