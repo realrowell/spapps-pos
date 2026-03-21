@@ -13,5 +13,5 @@ defineProps<Props>();
 </script>
 
 <template>
-    <img src="/images/hero-image-login.jpg" alt="hero image" >
+    <img src="/images/hero-image-login.jpg" alt="hero image" v-bind="$attrs"/>
 </template>
