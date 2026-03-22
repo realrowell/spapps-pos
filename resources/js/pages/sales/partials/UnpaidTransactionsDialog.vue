@@ -26,6 +26,7 @@ import type { Sale } from '@/types/sale/sale';
 import formatToCurrency from '@/composables/point-of-sale/formatToCurrency';
 import { Link } from '@inertiajs/vue3'
 import { salePointOfSalePaymentShow } from '@/routes'
+import formatDate from '@/composables/formatDate'
 
 const props = defineProps<{
   open: boolean
@@ -80,14 +81,7 @@ const emit = defineEmits(['update:open'])
                             <!-- <TableCell>{{ sale.created_at.toLocaleString() }}</TableCell> -->
                             <TableCell>
                                 {{
-                                    new Intl.DateTimeFormat(undefined, {
-                                        day: 'numeric',
-                                        month: 'numeric',
-                                        year: 'numeric',
-                                        hour: "numeric",
-                                        minute: "numeric",
-                                        second: "numeric",
-                                    }).format(new Date(sale.created_at))
+                                    formatDate(sale.created_at)
                                 }}
                             </TableCell>
                             <TableCell class="text-right">

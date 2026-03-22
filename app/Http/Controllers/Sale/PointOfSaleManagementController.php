@@ -66,12 +66,12 @@ class PointOfSaleManagementController extends Controller
             return redirect()->route('sale-pos');
         }
 
-
         $data = [
             'user' => Auth::user(),
             'sale_order' => $saleOrderService->getByRef($saleOrderId),
             'so_number' => $saleOrderId,
             'payment_providers' => $this->paymentProviderService->getAllActive(),
+            'sale_payments' => $saleOrder->sale_payments ?? null,
         ];
         return Inertia::render('sales/POSPaymentPage', $data);
     }

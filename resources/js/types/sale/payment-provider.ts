@@ -6,5 +6,6 @@ export interface PaymentProvider {
     account_name: string,
     account_number: string,
     mop: ModeOfPayment,
-    is_active: boolean
+    is_active: boolean,
+    is_external_id_required: boolean
 }

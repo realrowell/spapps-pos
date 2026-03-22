@@ -21,13 +21,19 @@ import type { PaymentProvider } from '@/types/sale/payment-provider';
 import type { Sale } from '@/types/sale/sale';
 import { toast } from 'vue-sonner';
 import Toaster from '@/components/Toaster.vue';
+import { SalePayment } from '@/types/sale/sale-payment';
+import { computed } from 'vue'
+import formatDate from '@/composables/formatDate'
+import Checkbox from '@/components/ui/checkbox/Checkbox.vue';
+import VoidTransactionDialog from './partials/VoidTransactionDialog.vue';
 
 
-const { user, so_number, sale_order, payment_providers } = defineProps<{
+const { user, so_number, sale_order, payment_providers, sale_payments } = defineProps<{
     user: User
     sale_order: Sale
     so_number: string
     payment_providers: PaymentProvider[]
+    sale_payments: SalePayment[] | null
 }>()
 
 
@@ -38,6 +44,7 @@ const paymentForm = useForm({
     external_transaction_id: '',
     reference_no: '',
     status: 'pending',
+    print_receipt: true,
 })
 
 const paymentSubmit = () => {
@@ -91,24 +98,27 @@ function handleKeyup(event: any) {
     }
 }
 
-function showToast() {
-    toast.promise<{ name: string }>(
-    () =>
-      new Promise(resolve =>
-        setTimeout(() => resolve({ name: 'Event' }), 2000),
-      ),
-    {
-      loading: 'Loading...',
-      success: (data: { name: string }) => `${data.name} has been created`,
-      error: 'Error',
-    },
-  )
-}
+// function showToast() {
+//     toast.promise<{ name: string }>(
+//     () =>
+//       new Promise(resolve =>
+//         setTimeout(() => resolve({ name: 'Event' }), 2000),
+//       ),
+//     {
+//       loading: 'Loading...',
+//       success: (data: { name: string }) => `${data.name} has been created`,
+//       error: 'Error',
+//     },
+//   )
+// }
+const totalPayments = computed(() => {
+  return sale_payments?.reduce((total, p) => total + Number(p.amount), 0) ?? 0
+})
 </script>
 
 <template>
     <Head title="Point of Sale - Payment" />
-    <Toaster />
+    <!-- <Toaster /> -->
     <div
         class="flex h-full flex-1 flex-col gap-4 rounded-xl p-4"
     >
@@ -162,34 +172,46 @@ function showToast() {
                                     <span>Total Amount</span>
                                     <span>{{ formatToCurrency(sale_order.total_amount) }}</span>
                                 </div>
+                                <div class="flex flex-row justify-between" v-if="sale_payments && sale_payments.length > 0">
+                                    <span>Total Paid</span>
+                                    <span>{{ formatToCurrency(totalPayments) }}</span>
+                                </div>
+                                <div class="flex flex-row justify-between" v-if="sale_payments && sale_payments.length > 0">
+                                    <span>Remaining payment</span>
+                                    <span>
+                                        {{
+                                        formatToCurrency(
+                                            sale_order.total_amount - (
+                                                sale_payments?.reduce((total, payment) => {
+                                                    return total + Number(payment.amount)
+                                                }, 0) || 0
+                                            )
+                                        )
+                                        }}
+                                    </span>
+                                </div>
                             </div>
                         </CardContent>
-                        <CardFooter class="flex flex-col gap-3">
-                            <Button
-                                class="w-full"
-                                variant="danger"
-                                :disabled="paymentForm.processing">
-                                <Spinner v-if="paymentForm.processing" />
-                                Void
-                            </Button>
+                        <CardFooter class="flex flex-col gap-3 items-stretch">
+                            <VoidTransactionDialog :sale_order="sale_order"/>
                         </CardFooter>
                     </Card>
                 </form>
             </div>
-            <div class="w-5/10 sticky top-10">
+            <div class="w-5/10 sticky top-10 flex flex-col gap-5">
                 <form @submit.prevent="paymentSubmit">
                     <Card>
                         <CardHeader>
                             <Label>Payment Method</Label>
-                            <div class="flex gap-1 overflow-x-auto pb-2">
+                            <div class="flex gap-1 overflow-x-auto pb-2 pt-1">
                                 <div
                                     v-for="provider in payment_providers"
                                     :key="provider.provider_code"
                                     @click="selectPaymentProvider(provider.provider_code)"
                                     :class="{
-                                        'border-(--app-primary-color) bg-(--app-primary-color)/10 hover:bg-(--app-primary-color) shadow-lg': paymentForm.payment_method === provider.provider_code
+                                        'text-white border-(--app-primary-color) bg-(--app-primary-color) shadow-lg hover:-translate-y-1 transition-transform': paymentForm.payment_method === provider.provider_code
                                     }"
-                                    class="rounded-lg flex flex-col items-center justify-center border min-w-25 h-20 p-2 cursor-pointer hover:bg-muted "
+                                    class="rounded-lg flex flex-col items-center justify-center border border-(--app-primary-color) min-w-25 h-20 p-2 cursor-pointer hover:-translate-y-1 transition-transform"
                                 >
                                     <span class="text-xs text-center w-full">
                                         {{ provider.provider_name }}
@@ -198,7 +220,10 @@ function showToast() {
                             </div>
                         </CardHeader>
                         <CardContent class="flex flex-col gap-3">
-                            <div class="flex flex-col gap-2">
+                            <div
+                                class="flex flex-col gap-2"
+                                v-if="payment_providers.find(p => p.provider_code === paymentForm.payment_method)?.is_external_id_required"
+                                >
                                 <Label>Transaction ID / Reference No.</Label>
                                 <Input
                                 v-model="paymentForm.external_transaction_id"
@@ -295,15 +320,62 @@ function showToast() {
                                     </div>
                                 </div>
                             </div>
-                            <Button
-                                size="lg"
-                                type="submit" :disabled="paymentForm.processing" class="w-full">
-                                <Spinner v-if="paymentForm.processing" />
-                                Complete Transaction
-                            </Button>
+                            <div class="flex flex-row justify-between">
+                                <div class="flex flex-row gap-2 align-center items-center justify-center">
+                                    <Checkbox
+                                        id="print-receipt"
+                                        label="Print receipt"
+                                        class="h-5 w-5"
+                                        v-model="paymentForm.print_receipt"
+                                    />
+                                    <Label for="print-receipt">Print receipt</Label>
+                                </div>
+                                <Button
+                                    size="lg"
+                                    type="submit" :disabled="paymentForm.processing"
+                                    class=" ">
+                                    <Spinner v-if="paymentForm.processing" />
+                                    Complete Transaction
+                                </Button>
+                            </div>
                         </CardContent>
                     </Card>
                 </form>
+
+                <div class="flex flex-col gap-2 mt-5 w-full" v-if="sale_payments && sale_payments.length > 0">
+                    <Label class="mb-3">Payment history</Label>
+                    <div class="flex" v-for="sale_payment in sale_payments" :key="sale_payment.payment_ref">
+                        <Card class="w-full">
+                            <CardContent class="flex flex-row justify-between">
+                                <div class="flex flex-col">
+                                    <Label>{{ sale_payment.payment_providers?.provider_name }}</Label>
+                                    <span>{{ formatToCurrency(sale_payment.amount) }}</span>
+                                </div>
+                                <div class="flex flex-col">
+                                    <span>{{ formatDate(sale_payment.created_at) }}</span>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </div>
+                    <div class="flex flex-row justify-between mt-3">
+                        <span>Total amount</span>
+                        <span>{{ formatToCurrency(totalPayments) }}</span>
+                    </div>
+                    <div class="flex flex-row justify-between mt-3">
+                        <span>Remaining amount</span>
+                        <span>
+                            {{
+                                formatToCurrency(
+                                    sale_order.total_amount - (
+                                        sale_payments?.reduce((total, payment) => {
+                                            return total + Number(payment.amount)
+                                        }, 0) || 0
+                                    )
+                                )
+                            }}
+                        </span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

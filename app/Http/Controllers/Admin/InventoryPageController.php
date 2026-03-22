@@ -47,6 +47,13 @@ class InventoryPageController extends Controller
         return Inertia::render('inventories/ProductCreate', $data);
     }
 
+    public function ProductDetailsPage($productId){
+        $data = [
+            'product' => $this->prService->findByCode($productId),
+        ];
+        return Inertia::render('inventories/ProductDetails', $data);
+    }
+
     public function CategoriesPage()
     {
         $data = [

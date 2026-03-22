@@ -58,7 +58,7 @@ class SaleOrderService extends \App\Services\BaseService
     }
 
     public function getByRef($ref){
-        return Sale::where('sale_ref', $ref)->with(['sale_items'])->first();
+        return Sale::where('sale_ref', $ref)->with(['sale_items', 'sale_payments.payment_providers'])->first();
     }
 
     /**

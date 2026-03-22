@@ -20,7 +20,6 @@ import { ArrowUpDown, ChevronDown, MoreHorizontal } from 'lucide-vue-next'
 import { computed } from "vue"
 import { h, ref } from 'vue'
 import Badge from '@/components/ui/badge/Badge.vue'
-
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import {
@@ -42,6 +41,8 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import type { Product } from '@/types/inventories/product'
+import { inventoryProductsDetails } from '@/routes'
+import { Link } from '@inertiajs/vue3';
 
 function valueUpdater<T>(updaterOrValue: T | ((prev: T) => T), ref: { value: T }): void {
   ref.value = typeof updaterOrValue === 'function' ? (updaterOrValue as (prev: T) => T)(ref.value) : updaterOrValue
@@ -287,8 +288,10 @@ function copy(id: string) {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                    <DropdownMenuItem @click="copy(product.pr_code)">
-                        Copy category ID
+                    <DropdownMenuItem>
+                        <Link class="w-full" :href="inventoryProductsDetails(product.pr_code).url">
+                            Details
+                        </Link>
                     </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>View customer</DropdownMenuItem>

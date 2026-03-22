@@ -46,4 +46,8 @@ class SalePayment extends Model
             self::STATUS_REVERSED => 'Reversed',
         ];
     }
+
+    public function payment_providers(){
+        return $this->hasOne(PaymentProvider::class, 'id', 'payment_provider_id');
+    }
 }
