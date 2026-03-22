@@ -68,8 +68,6 @@ class SalePageController extends Controller
         return Inertia::render('sales/POS', $data);
     }
 
-    public function PointOfSalePayment() {}
-
     public function ModeOfPaymentsPage()
     {
         $data = [

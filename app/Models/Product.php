@@ -101,12 +101,12 @@ class Product extends Model
         return $this->hasMany(PrPrice::class, 'pr_id', 'id');
     }
 
-    public function invLogs()
+    public function inv_logs()
     {
         return $this->hasMany(InvLog::class, 'pr_id', 'id');
     }
 
-    public function prInventories()
+    public function pr_inventories()
     {
         return $this->hasMany(PrInventory::class, 'pr_id', 'id');
     }

@@ -15,7 +15,8 @@ class PaymentProvider extends Model
         'mop_id',
         'account_name',
         'account_number',
-        'is_active'
+        'is_active',
+        'is_external_id_required'
     ];
 
     public static function boot()
