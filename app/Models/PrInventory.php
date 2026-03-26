@@ -24,8 +24,12 @@ class PrInventory extends Model
         });
     }
 
-    public function locations()
+    public function location()
     {
         return $this->hasOne(Location::class, 'id', 'loc_id');
+    }
+    public function product()
+    {
+        return $this->hasOne(Product::class, 'id', 'pr_id');
     }
 }

@@ -55,7 +55,7 @@
         "laravel-vite-plugin": "^2.0.0",
         "lucide-vue-next": "^0.468.0",
         "material-symbols": "^0.40.2",
-        "reka-ui": "^2.8.0",
+        "reka-ui": "^2.9.2",
         "tailwind-merge": "^3.2.0",
         "tw-animate-css": "^1.2.5",
         "vee-validate": "^4.15.1",
