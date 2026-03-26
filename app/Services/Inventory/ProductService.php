@@ -18,11 +18,11 @@ class ProductService extends \App\Services\BaseService
      */
     public function getAll(): Collection
     {
-        return Product::with(['categories', 'brands', 'prices', 'pr_inventories.locations'])->get();
+        return Product::with(['categories', 'brands', 'prices', 'pr_inventories.location'])->get();
     }
 
     public function getAllActive(){
-        return Product::where('status', 'active')->with(['categories', 'brands', 'prices', 'pr_inventories.locations'])->get();
+        return Product::where('status', 'active')->with(['categories', 'brands', 'prices', 'pr_inventories.location'])->get();
     }
 
     /**
@@ -72,7 +72,7 @@ class ProductService extends \App\Services\BaseService
      */
     public function findByCode(int|string $id): ?Product
     {
-        return Product::where('pr_code',$id)->with(['categories','brands','prices','inv_logs','pr_inventories'])->first();
+        return Product::where('pr_code',$id)->with(['categories','brands','prices','inv_logs','pr_inventories.location','pr_inventories.product'])->first();
     }
 
     /**

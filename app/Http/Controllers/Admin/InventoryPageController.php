@@ -50,6 +50,7 @@ class InventoryPageController extends Controller
     public function ProductDetailsPage($productId){
         $data = [
             'product' => $this->prService->findByCode($productId),
+            'product_statuses' => $this->prService->getStatus(),
         ];
         return Inertia::render('inventories/ProductDetails', $data);
     }

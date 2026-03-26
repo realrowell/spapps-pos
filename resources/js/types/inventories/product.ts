@@ -22,6 +22,10 @@ export interface Product {
     pr_inventories: PrInventory[]
     serial_number: string
     warranty_info: string
+    statuses: Array<{
+        status: string,
+        updated_at: string
+    }>
 }
 
 // export interface Price {
