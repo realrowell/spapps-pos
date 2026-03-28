@@ -41,6 +41,7 @@ Route::prefix('inventory')->middleware('auth')->controller(InventoryPageControll
 
 Route::prefix('inventory')->name('inventory-')->group(function () {
     Route::post('products/store', [ProductManagementController::class, 'store'])->name('products-store');
+    Route::post('products/product-price/store', [ProductManagementController::class, 'addProductPrice'])->name('product-price-store');
     Route::post('categories/store', [CategoryManagementController::class, 'store'])->name('categories-store');
     Route::post('brands/store', [BrandManagementController::class, 'store'])->name('brands-store');
     Route::post('locations/store', [LocationManagementController::class, 'store'])->name('locations-store');
