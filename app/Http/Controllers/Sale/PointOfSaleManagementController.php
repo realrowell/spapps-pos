@@ -52,7 +52,7 @@ class PointOfSaleManagementController extends Controller
     public function showPayment(SaleOrderService $saleOrderService, $saleOrderId){
         $salePayment = $saleOrderService->getByRef($saleOrderId);
         $saleOrder = $saleOrderService->getByRef($saleOrderId);
-
+        // dd($salePayment);
         // if($salePayment != null){
         //     if($salePayment->status === 'paid'){
         //         return redirect()->route('sale-pos')->with('error', 'This sale order has already been paid.');

@@ -200,7 +200,7 @@ const toggleBrand = (id: string) => {
                     </DropdownMenu>
                     <UnpaidTransactionDialog v-model:open="dialogOpen" :sales="sales" />
                 </div>
-                <div class="flex flex-col gap-3 w-full overflow-x-auto">
+                <!-- <div class="flex flex-col gap-3 w-full overflow-x-auto">
                     <Label>Category</Label>
                     <div class="flex flex-row gap-1">
                         <div
@@ -239,7 +239,7 @@ const toggleBrand = (id: string) => {
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <div class="flex flex-col gap-3 w-full">
                     <Label>Products</Label>
                     <div class="flex flex-row w-full overflow-x-auto flex-wrap">

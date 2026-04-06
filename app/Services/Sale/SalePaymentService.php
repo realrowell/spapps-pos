@@ -3,6 +3,8 @@
 namespace App\Services\Sale;
 
 use App\Models\PaymentProvider;
+use App\Models\PrInventory;
+use App\Models\Product;
 use App\Models\Sale;
 use App\Models\SalePayment;
 use Illuminate\Database\Eloquent\Collection;
@@ -53,11 +55,18 @@ class SalePaymentService extends \App\Services\BaseService
 
             $sale = Sale::where('sale_ref', $data['sale_id'])->firstOrFail();
             $payment_method = PaymentProvider::where('provider_code', $data['payment_method'])->first();
+            $payment = $data['payment'];
+
+            $total_payment = $this->getTotalPayment($sale);
+
+            if($data['payment'] > $sale->total_amount || $total_payment + $data['payment'] > $sale->total_amount){
+                $payment = $sale->total_amount - $total_payment;
+            }
 
             $sale_payment = SalePayment::create([
                 'sale_id' => $sale['id'],
                 'payment_provider_id' => $payment_method->id,
-                'amount' => $data['payment'],
+                'amount' => $payment,
                 'external_transaction_id' => $data['external_transaction_id'] ?? null,
                 'reference_no' => $data['reference_no'] ?? null,
                 'paid_at' => now(),
@@ -70,6 +79,7 @@ class SalePaymentService extends \App\Services\BaseService
                     'payment_status' => 'paid',
                     'status' => 'completed'
                 ]);
+                $this->subProductInventory($sale);
             }
             else{
                 $sale->update([
@@ -77,21 +87,38 @@ class SalePaymentService extends \App\Services\BaseService
                     'status' => 'partial'
                 ]);
             }
-
             return $sale_payment;
         });
     }
 
     private function checkSaleOrderPayment($sale){
-        $salePayments = SalePayment::where('sale_id', $sale->id)->get();
-        $total_payment = $salePayments->sum('amount');
-        Log::info('checkSaleOrderPayment',['payments' => $salePayments->toArray(),'total_payment' => $total_payment]);
+        $total_payment = $this->getTotalPayment($sale);
+        // Log::info('checkSaleOrderPayment',['payments' => $salePayments->toArray(),'total_payment' => $total_payment]);
         if($sale->total_amount == $total_payment){
             return true;
         }
         else{
             return false;
         }
+    }
+
+    private function getTotalPayment($sale){
+        $salePayments = SalePayment::where('sale_id', $sale->id)->get();
+        $total_payment = $salePayments->sum('amount');
+        return $total_payment;
+    }
+
+    private function subProductInventory($sale){
+        $products = $sale->sale_items;
+        $this->transaction(function () use ($products){
+            foreach($products as $product){
+                $inventory = PrInventory::where('pr_id', $product->products->id)->first();
+
+                $new_inventory = $inventory->update([
+                    'stock_qty' => $inventory->stock_qty - $product->qty,
+                ]);
+            }
+        });
     }
 
 
