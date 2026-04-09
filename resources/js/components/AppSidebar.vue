@@ -13,7 +13,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { dashboard, inventoryProducts, inventoryCategories, inventoryBrands, inventoryLocations, saleSales, salePos, saleMops, salePaymentProviders } from '@/routes';
+import { dashboard, inventoryProducts, inventoryCategories, inventoryBrands, inventoryLocations, saleSales, salePos, saleMops, salePaymentProviders, stocksPrStockPage } from '@/routes';
 import { type NavItem } from '@/types';
 import AppLogo from './AppLogo.vue';
 
@@ -68,6 +68,11 @@ const mainNavItems: NavItem[] = [
                 href: saleMops(),
             },
         ],
+    },
+    {
+        title: 'Product Stocks',
+        href: stocksPrStockPage(),
+        icon: Package,
     },
     {
         title: 'Point of Sale',

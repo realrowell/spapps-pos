@@ -2,6 +2,8 @@
 
 namespace App\Services\Sale;
 
+use App\Events\SaleCompleted;
+use App\Models\InvLog;
 use App\Models\PaymentProvider;
 use App\Models\PrInventory;
 use App\Models\Product;
@@ -53,7 +55,7 @@ class SalePaymentService extends \App\Services\BaseService
     {
         return $this->transaction(function () use ($data) {
 
-            $sale = Sale::where('sale_ref', $data['sale_id'])->firstOrFail();
+            $sale = Sale::where('sale_ref', $data['sale_id'])->with(['sale_items.products'])->firstOrFail();
             $payment_method = PaymentProvider::where('provider_code', $data['payment_method'])->first();
             $payment = $data['payment'];
 
@@ -79,7 +81,7 @@ class SalePaymentService extends \App\Services\BaseService
                     'payment_status' => 'paid',
                     'status' => 'completed'
                 ]);
-                $this->subProductInventory($sale);
+                $this->deductInventory($sale);
             }
             else{
                 $sale->update([
@@ -108,17 +110,11 @@ class SalePaymentService extends \App\Services\BaseService
         return $total_payment;
     }
 
-    private function subProductInventory($sale){
+    private function deductInventory($sale){
         $products = $sale->sale_items;
-        $this->transaction(function () use ($products){
-            foreach($products as $product){
-                $inventory = PrInventory::where('pr_id', $product->products->id)->first();
 
-                $new_inventory = $inventory->update([
-                    'stock_qty' => $inventory->stock_qty - $product->qty,
-                ]);
-            }
-        });
+        event(new SaleCompleted($sale));
+
     }
 
 

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\InventoryPageController;
+use App\Http\Controllers\Admin\PrStockPageController;
 use App\Http\Controllers\Inventory\BrandManagementController;
 use App\Http\Controllers\Inventory\CategoryManagementController;
 use App\Http\Controllers\Inventory\LocationManagementController;
@@ -64,4 +65,9 @@ Route::prefix('sale')->name('sale-')->group(function () {
     Route::get('point-of-sale/payment/{saleOrder}', [PointOfSaleManagementController::class, 'showPayment'])->name('point-of-sale-payment-show');
     Route::post('point-of-sale/complete-payment', [PointOfSaleManagementController::class, 'createPayment'])->name('point-of-sale-create-payment');
     Route::post('point-of-sale/void-sale/{saleOrderId}', [PointOfSaleManagementController::class, 'voidSaleOrder'])->name('point-of-sale-void-sale');
+});
+
+
+Route::prefix('stocks')->middleware('auth')->controller(PrStockPageController::class)->name('stocks-')->group(function () {
+    Route::get('pr-stocks', 'PrStocksPage')->name('pr-stock-page');
 });
