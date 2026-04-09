@@ -51,6 +51,9 @@ class InventoryPageController extends Controller
         $data = [
             'product' => $this->prService->findByCode($productId),
             'product_statuses' => $this->prService->getStatus(),
+            'price_types' => $this->prService->getPriceType(),
+            'uom_options' => $this->prService->getUom(),
+            'priceTypeOptions' => $this->prService->getPriceType(),
         ];
         return Inertia::render('inventories/ProductDetails', $data);
     }

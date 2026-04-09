@@ -31,4 +31,8 @@ class SaleItem extends Model
             }
         });
     }
+
+    public function products(){
+        return $this->hasOne(Product::class, 'id', 'pr_id');
+    }
 }

@@ -10,6 +10,7 @@ use App\Models\Product;
 use App\Models\PrPrice;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Log;
 
 class ProductService extends \App\Services\BaseService
 {
@@ -122,6 +123,27 @@ class ProductService extends \App\Services\BaseService
             }
 
             return $product;
+        });
+    }
+
+    public function createPricing(array $data){
+        $product = Product::where('pr_code', $data['product_id'])->first();
+        $current_pr_price = PrPrice::where('pr_id', $product->id)->where('price_type', $data['price_type'])->get();
+        if(!empty($current_pr_price)){
+            return false;   //this will determine by the controller as error. | This will throw error via controller.
+        }
+
+        return $this->transaction(function () use ($data, $product){
+            $new_pr_price = PrPrice::create([
+                'pr_id' => $product->id,
+                'price_type' => $data['price_type'],
+                'price' => $data['price'],
+                'effective_from' => $data['effective_from'] ?? null,
+                'effective_to' => $data['effective_to'] ?? null,
+                'is_active' => false
+            ]);
+
+            return $new_pr_price;
         });
     }
 

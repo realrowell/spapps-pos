@@ -22,7 +22,7 @@ import type { Sale } from '@/types/sale/sale';
 import { toast } from 'vue-sonner';
 import Toaster from '@/components/Toaster.vue';
 import { SalePayment } from '@/types/sale/sale-payment';
-import { computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 import formatDate from '@/composables/formatDate'
 import Checkbox from '@/components/ui/checkbox/Checkbox.vue';
 import VoidTransactionDialog from './partials/VoidTransactionDialog.vue';
@@ -36,7 +36,6 @@ const { user, so_number, sale_order, payment_providers, sale_payments } = define
     sale_payments: SalePayment[] | null
 }>()
 
-
 const paymentForm = useForm({
     payment: 0 as number,
     payment_method: '' as PaymentProvider['provider_code'] | '',
@@ -45,30 +44,15 @@ const paymentForm = useForm({
     reference_no: '',
     status: 'pending',
     print_receipt: true,
+    change_due: 0 as number || null,
 })
 
-const paymentSubmit = () => {
-    paymentForm.post(salePointOfSaleCreatePayment().url, {
-        onSuccess: () => {
-            paymentForm.reset()
-        }
-    })
-}
-const voidSale = () => {
-    router.post(
-        salePointOfSaleVoidSale(sale_order.sale_ref),
-        {},
-        {
-            onSuccess: () => {
-                console.log('Sale voided')
-            }
-        }
-    )
-}
-
-
-function selectPaymentProvider(provider_code: string) {
-    paymentForm.payment_method = paymentForm.payment_method === provider_code ? '' : provider_code
+function computeChangeDue(payment_amount: number){
+    if(payment_amount > amountDue()){
+        paymentForm.change_due = payment_amount - amountDue()
+    } else {
+        paymentForm.change_due = 0
+    }
 }
 
 function handlePaymentInput(value: any ){
@@ -84,7 +68,13 @@ function handlePaymentInput(value: any ){
     if(value == 'clear'){
         paymentForm.payment = 0
     }
+    computeChangeDue(paymentForm.payment)
 }
+
+function selectPaymentProvider(provider_code: string) {
+    paymentForm.payment_method = paymentForm.payment_method === provider_code ? '' : provider_code
+}
+
 
 function handleKeyup(event: any) {
     if ((event.key >= '0' && event.key <= '9')){
@@ -96,24 +86,48 @@ function handleKeyup(event: any) {
     if(event.key === 'Delete'){
         paymentForm.payment = 0
     }
+    computeChangeDue(paymentForm.payment)
 }
 
-// function showToast() {
-//     toast.promise<{ name: string }>(
-//     () =>
-//       new Promise(resolve =>
-//         setTimeout(() => resolve({ name: 'Event' }), 2000),
-//       ),
-//     {
-//       loading: 'Loading...',
-//       success: (data: { name: string }) => `${data.name} has been created`,
-//       error: 'Error',
-//     },
-//   )
-// }
 const totalPayments = computed(() => {
-  return sale_payments?.reduce((total, p) => total + Number(p.amount), 0) ?? 0
+    return sale_payments?.reduce((total, p) => total + Number(p.amount), 0) ?? 0
 })
+
+const remainingAmountDue = computed(()=>{
+    return sale_order.total_amount - (
+        sale_payments?.reduce((total, payment) => {
+            return total + Number(payment.amount)
+        }, 0) || 0
+    )
+})
+
+function amountDue() {
+    if(remainingAmountDue.value == sale_order.total_amount){
+        return sale_order.total_amount
+    }
+    return remainingAmountDue.value
+}
+
+
+const paymentSubmit = () => {
+    paymentForm.post(salePointOfSaleCreatePayment().url, {
+        onSuccess: () => {
+            paymentForm.reset()
+        }
+    })
+}
+
+const voidSale = () => {
+    router.post(
+        salePointOfSaleVoidSale(sale_order.sale_ref),
+        {},
+        {
+            onSuccess: () => {
+                console.log('Sale voided')
+            }
+        }
+    )
+}
 </script>
 
 <template>
@@ -153,42 +167,44 @@ const totalPayments = computed(() => {
                                     </div>
                                 </div>
                             </div>
-                            <div class="flex flex-col">
-                                <div class="flex flex-row justify-between w-full">
-                                    <span>Subtotal:</span>
-                                    <span>{{ formatToCurrency(sale_order.subtotal) }}</span>
-                                </div>
-                                <div class="flex flex-row justify-between">
-                                    <span>Discount: </span>
-                                    <span>
-                                        {{ formatToCurrency(sale_order.discount_amount) }}
-                                    </span>
-                                </div>
-                                <div class="flex flex-row justify-between pb-2">
-                                    <span>Tax (12%): </span>
-                                    <span>{{ formatToCurrency(sale_order.tax_amount) }}</span>
-                                </div>
-                                <div class="flex flex-row justify-between">
-                                    <span>Total Amount</span>
-                                    <span>{{ formatToCurrency(sale_order.total_amount) }}</span>
-                                </div>
-                                <div class="flex flex-row justify-between" v-if="sale_payments && sale_payments.length > 0">
-                                    <span>Total Paid</span>
-                                    <span>{{ formatToCurrency(totalPayments) }}</span>
-                                </div>
-                                <div class="flex flex-row justify-between" v-if="sale_payments && sale_payments.length > 0">
-                                    <span>Remaining payment</span>
-                                    <span>
-                                        {{
-                                        formatToCurrency(
-                                            sale_order.total_amount - (
-                                                sale_payments?.reduce((total, payment) => {
-                                                    return total + Number(payment.amount)
-                                                }, 0) || 0
+                            <div class="border-t border-gray-400 pt-3 mt-3 w-full">
+                                <div class="bg-gray-100 border border-neutral-300 rounded-xl flex flex-col w-full p-5 gap-1 text-sm">
+                                    <div class="flex flex-row justify-between w-full">
+                                        <span>Subtotal:</span>
+                                        <span>{{ formatToCurrency(sale_order.subtotal) }}</span>
+                                    </div>
+                                    <div class="flex flex-row justify-between">
+                                        <span>Discount: </span>
+                                        <span>
+                                            {{ formatToCurrency(sale_order.discount_amount) }}
+                                        </span>
+                                    </div>
+                                    <div class="flex flex-row justify-between pb-2">
+                                        <span>Tax (12%): </span>
+                                        <span>{{ formatToCurrency(sale_order.tax_amount) }}</span>
+                                    </div>
+                                    <div class="flex flex-row justify-between border-t border-neutral-400 pt-2">
+                                        <span>Total Amount: </span>
+                                        <span>{{ formatToCurrency(sale_order.total_amount) }}</span>
+                                    </div>
+                                    <div class="flex flex-row justify-between pt-2" v-if="sale_payments && sale_payments.length > 0">
+                                        <span>Total Paid</span>
+                                        <span>{{ formatToCurrency(totalPayments) }}</span>
+                                    </div>
+                                    <div class="flex flex-row justify-between pt-2" v-if="sale_payments && sale_payments.length > 0">
+                                        <span>Remaining amount</span>
+                                        <span>
+                                            {{
+                                            formatToCurrency(
+                                                sale_order.total_amount - (
+                                                    sale_payments?.reduce((total, payment) => {
+                                                        return total + Number(payment.amount)
+                                                    }, 0) || 0
+                                                )
                                             )
-                                        )
-                                        }}
-                                    </span>
+                                            }}
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </CardContent>
@@ -234,13 +250,26 @@ const totalPayments = computed(() => {
                                     <Card class="bg-(--app-primary-color) w-1/2">
                                         <CardContent class="text-white flex flex-row justify-between text-2xl">
                                             <span>Total due: </span>
-                                            <span>{{ formatToCurrency(sale_order.total_amount) }}</span>
+                                            <span v-if="remainingAmountDue == sale_order.total_amount">
+                                                {{ formatToCurrency(sale_order.total_amount) }}
+                                            </span>
+                                            <span v-else>
+                                                {{ formatToCurrency(remainingAmountDue) }}
+                                            </span>
                                         </CardContent>
                                     </Card>
                                     <Card class="border-(--app-primary-color) w-1/2">
                                         <CardContent class=" flex flex-row justify-between text-2xl h-full">
                                             <span>Tendered: </span>
                                             <span>{{ formatToCurrency(paymentForm.payment) }}</span>
+                                        </CardContent>
+                                    </Card>
+                                </div>
+                                <div v-if="paymentForm.change_due" class="flex flex-row">
+                                    <Card class="w-1/2 bg-muted">
+                                        <CardContent class=" flex flex-row justify-between text-2xl h-full">
+                                            <span>Change due: </span>
+                                            <span>{{ formatToCurrency(paymentForm.change_due || 0) }}</span>
                                         </CardContent>
                                     </Card>
                                 </div>
@@ -313,7 +342,7 @@ const totalPayments = computed(() => {
                                             type="button"
                                             variant="light"
                                             class="text-2xl p-10 w-full"
-                                            @click="paymentForm.payment = sale_order.total_amount"
+                                            @click="paymentForm.payment = amountDue()"
                                         >
                                             Exact Amount
                                         </Button>
@@ -358,20 +387,14 @@ const totalPayments = computed(() => {
                         </Card>
                     </div>
                     <div class="flex flex-row justify-between mt-3">
-                        <span>Total amount</span>
+                        <span>Total amount paid</span>
                         <span>{{ formatToCurrency(totalPayments) }}</span>
                     </div>
                     <div class="flex flex-row justify-between mt-3">
                         <span>Remaining amount</span>
                         <span>
                             {{
-                                formatToCurrency(
-                                    sale_order.total_amount - (
-                                        sale_payments?.reduce((total, payment) => {
-                                            return total + Number(payment.amount)
-                                        }, 0) || 0
-                                    )
-                                )
+                                formatToCurrency(remainingAmountDue)
                             }}
                         </span>
                     </div>

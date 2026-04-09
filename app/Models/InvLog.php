@@ -26,7 +26,7 @@ class InvLog extends Model
         'ref_type',
         'ref_id',
         'unit_cost',
-        'total_cost',
+        'unit_price',
         'remarks',
     ];
 

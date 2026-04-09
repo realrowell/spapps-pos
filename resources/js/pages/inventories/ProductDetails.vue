@@ -22,14 +22,17 @@ import {
   RadioGroup,
   RadioGroupItem,
 } from '@/components/ui/radio-group';
+import { Plus } from 'lucide-vue-next';
+import AddPricingDialog from './partials/AddPricingDialog.vue';
+import { ref } from 'vue';
 
+const pricingDialogOpen = ref(false);
 
-const { product, product_statuses } = defineProps<{
+const { product, product_statuses, price_types, uom_options } = defineProps<{
     product: Product
-    product_statuses: Array<{
-        key: string,
-        status: string,
-    }>
+    product_statuses: any
+    price_types: any
+    uom_options: any
 }>()
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -65,8 +68,6 @@ const form = useForm({
     stock_location: null,
     track_inventory: true,
 })
-
-console.log(product_statuses);
 </script>
 
 <template>
@@ -80,22 +81,25 @@ console.log(product_statuses);
 
             </div>
             <div class="grid grid-cols-4 gap-3">
-                <div class="col-span-1 flex flex-col gap-5 p-5 rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border bg-card">
-                    <div class="flex flex-col gap-2 flex-1">
+                <div class="col-span-1 flex flex-col gap-5 justify-start p-5 rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border bg-card">
+                    <div class="flex flex-col gap-2">
                         <img src="/images/default_product.jpg" alt="product image" class="fill w-full h-auto aspect-square border-4">
                     </div>
-                    <RadioGroup :default-value="product.status">
-                        <div class="flex flex-col items-start gap-3">
-                            <div
-                                v-for="(label, key) in product_statuses"
-                                :key="key"
-                                class="flex items-center space-x-2"
-                            >
-                                <RadioGroupItem :id="String(key)" :value="String(key)" />
-                                <Label :for="String(key)">{{ label }}</Label>
+                    <div class="flex flex-col gap-3">
+                        <span class="text-muted-foreground">Status</span>
+                        <RadioGroup :default-value="product.status">
+                            <div class="flex flex-col items-start gap-3">
+                                <div
+                                    v-for="(label, key) in product_statuses"
+                                    :key="key"
+                                    class="flex items-center space-x-2"
+                                >
+                                    <RadioGroupItem :id="String(key)" :value="String(key)" />
+                                    <Label :for="String(key)">{{ label }}</Label>
+                                </div>
                             </div>
-                        </div>
-                    </RadioGroup>
+                        </RadioGroup>
+                    </div>
                 </div>
                 <div class="col-span-3 flex flex-col gap-5 p-5 rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border bg-card">
                     <h2 class="text-xl">General Information</h2>
@@ -135,7 +139,9 @@ console.log(product_statuses);
                         <div class="grid grid-cols-4 gap-3">
                             <div class="flex flex-col">
                                 <span class="text-muted-foreground">Sold per:</span>
-                                <span>{{ product.uom }}</span>
+                                <span>
+                                    {{ uom_options?.[product.uom as keyof typeof uom_options] || product.uom }}
+                                </span>
                             </div>
                             <div class="flex flex-col">
                                 <span class="text-muted-foreground">Cost (WAC):</span>
@@ -146,17 +152,25 @@ console.log(product_statuses);
                     <div class="flex flex-col gap-1">
                         <span class="text-muted-foreground">Pricing:</span>
                         <div class="flex flex-row gap-3">
-                            <div v-for="price in product.prices" :key="price.price_code" class="flex flex-col gap-1">
-                                <Card class="w-48 border-(--app-primary-color)">
-                                    <CardContent>
-                                        {{ price.price_type }}
-                                        <div v-if="price.effective_from != null && price.effective_to != null">
-                                            Effective from {{ price.effective_from }} to {{ price.effective_to }}
-                                        </div>
-                                        <p class="text-lg ">{{ formatToCurrency(price.price) }}</p>
-                                    </CardContent>
-                                </Card>
+                            <div v-for="price in product.prices" :key="price.price_code">
+                                <div class="flex flex-col gap-1 w-48 rounded-lg border border-(--app-primary-color) p-5 bg-card">
+                                    <span>{{ price.price_type }}</span>
+                                    <div v-if="price.effective_from != null && price.effective_to != null">
+                                        Effective from {{ price.effective_from }} to {{ price.effective_to }}
+                                    </div>
+                                    <p class="text-lg ">{{ formatToCurrency(price.price) }}</p>
+                                </div>
                             </div>
+                            <div
+                                class="flex flex-col gap-1 w-48 rounded-lg border border-(--app-primary-color) p-5 bg-card cursor-pointer hover:bg-(--app-primary-color) hover:text-white transition-colors duration-200"
+                                @click="pricingDialogOpen = true"
+                            >
+                                <div class="justify-center items-center text-center">
+                                    <Plus class="mx-auto" />
+                                    Add pricing
+                                </div>
+                            </div>
+                            <AddPricingDialog v-model:open="pricingDialogOpen" :product="product" :price_types="price_types"/>
                         </div>
                     </div>
                     <div class="flex flex-col gap-1">
@@ -171,6 +185,10 @@ console.log(product_statuses);
                                 </Card>
                             </div>
                         </div>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <h3 class="text-muted-foreground">Product Details:</h3>
+                        <div v-html="product.pr_desc"/>
                     </div>
                     <div class="flex flex-row gap-3">
                         <Button variant="outline" size="sm">Edit</Button>
