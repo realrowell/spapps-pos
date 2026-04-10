@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
-// import { Link } from '@inertiajs/vue3';
-// import Button from '@/components/ui/button/Button.vue';
+import { Link } from '@inertiajs/vue3';
+import Button from '@/components/ui/button/Button.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
-import { saleSales } from '@/routes';
+import { saleSales, stocksPrStockInputPage, stocksPrStockPage } from '@/routes';
 import { type BreadcrumbItem } from '@/types';
 import SaleTable from './partials/SaleTable.vue';
 import { Sale } from '@/types/sale/sale';
@@ -13,7 +13,7 @@ import Card from '@/components/ui/card/Card.vue';
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Product Stocks',
-        href: saleSales().url,
+        href: stocksPrStockPage().url,
     },
 ];
 
@@ -30,9 +30,9 @@ const breadcrumbs: BreadcrumbItem[] = [
         >
             <div class="flex flex-row justify-between align-center">
                 <h2 class="text-2xl">Product Stock List</h2>
-                <!-- <Link :href="inventoryBrandsCreate().url">
-                    <Button variant="default" >Add Brand</Button>
-                </Link> -->
+                <Link :href="stocksPrStockInputPage().url">
+                    <Button variant="default" >Input Stock</Button>
+                </Link>
             </div>
             <div class="flex flex-row gap-3 ">
                 <Card class="p-4 flex-1">

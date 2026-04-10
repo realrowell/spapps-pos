@@ -10,6 +10,7 @@ use App\Http\Controllers\Sale\ModeOfPaymentsManagementController;
 use App\Http\Controllers\Admin\SalePageController;
 use App\Http\Controllers\Sale\PaymentProviderManagementController;
 use App\Http\Controllers\Sale\PointOfSaleManagementController;
+use App\Http\Controllers\Stock\PrStockManagementController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 // use Laravel\Fortify\Features;
@@ -70,4 +71,9 @@ Route::prefix('sale')->name('sale-')->group(function () {
 
 Route::prefix('stocks')->middleware('auth')->controller(PrStockPageController::class)->name('stocks-')->group(function () {
     Route::get('pr-stocks', 'PrStocksPage')->name('pr-stock-page');
+    Route::get('pr-stocks/input', 'PrStockInputPage')->name('pr-stock-input-page');
+});
+
+Route::prefix('stocks')->name('stocks-')->group(function () {
+    Route::post('pr-stocks/store', [PrStockManagementController::class, 'store'])->name('pr-stock-store');
 });

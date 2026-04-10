@@ -17,6 +17,7 @@ class SaleItem extends Model
         'qty',
         'price_type',
         'unit_price',
+        'unit_cost',
         'line_total'
     ];
 

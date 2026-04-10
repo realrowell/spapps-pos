@@ -13,51 +13,50 @@ import {
     SelectValue,
 } from '@/components/ui/select'
 import AppLayout from '@/layouts/AppLayout.vue';
-import { saleModeOfPaymentsStore, saleMops, saleMopsCreate, saleSales } from '@/routes';
+import { stocksPrStockPage, stocksPrStockStore } from '@/routes';
 import { type BreadcrumbItem } from '@/types';
+import { type Product } from '@/types/inventories/product';
+import { type Location } from '@/types/inventories/location';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Sales',
-        href: saleSales().url,
+        title: 'Product Stocks',
+        href: stocksPrStockPage().url,
     },
     {
-        title: 'Mode of Payments',
-        href: saleMops().url,
-    },
-    {
-        title: 'Create Mode of Payment',
-        href: saleMopsCreate().url,
+        title: 'Product Stocks Input',
+        // href: saleMopsCreate().url,
     },
 ];
 
-const { typeOptions, generatedCode } = defineProps<{
-    typeOptions: any;
-    generatedCode: string;
+const { products } = defineProps<{
+    products: Product[];
+    locations: Location[];
 }>()
 
 const form = useForm({
-    name: '',
-    code: generatedCode,
-    type: '',
-    icon: '',
+    product: '',
+    location: '',
+    quantity: 0 as number,
+    unit_cost: 0.00 as number,
+    remarks: ''
 })
 
 const submit = () => {
-    form.post(saleModeOfPaymentsStore().url)
+    form.post(stocksPrStockStore().url)
 }
 
-// console.log(generatedCode)
+console.log(products)
 </script>
 
 <template>
-    <Head title="Create Mode of Payments" />
+    <Head title="Input Product Stocks" />
     <AppLayout :breadcrumbs="breadcrumbs">
         <div
             class="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4"
         >
             <div class="flex flex-row justify-between align-center">
-                <h2 class="text-2xl">Create Mode of Payments</h2>
+                <h2 class="text-2xl">Input Product Stocks</h2>
                 <!-- <Link :href="inventoryBrandsCreate().url">
                     <Button variant="default" >Add Brand</Button>
                 </Link> -->
@@ -66,7 +65,7 @@ const submit = () => {
                 class="relative min-h-screen flex-1 rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border pt-5 ps-5 pe-5 bg-card"
             >
                 <form @submit.prevent="submit" class="flex flex-col justify-start align-center gap-5 md:items-start sm:items-stretch items-stretch">
-                    <div class="flex flex-col justify-start align-center gap-3">
+                    <!-- <div class="flex flex-col justify-start align-center gap-3">
                         <Label for="Code">Code</Label>
                         <Input id="Code" v-model="form.code" placeholder="Enter Custom Code here.."></Input>
                         <div v-if="form.errors.code" class="text-red-500 text-sm">
@@ -79,31 +78,57 @@ const submit = () => {
                         <div v-if="form.errors.name" class="text-red-500 text-sm">
                             {{ form.errors.name }}
                         </div>
-                    </div>
+                    </div> -->
                     <div class="flex flex-col justify-start align-center gap-3">
-                        <Label for="Type">Type</Label>
-                        <Select v-model="form.type">
+                        <Label for="Type">Product</Label>
+                        <Select v-model="form.product">
                             <SelectTrigger class="w-full">
                                 <SelectValue placeholder="Select brand" />
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectGroup>
-                                    <SelectLabel>Brands</SelectLabel>
-                                    <SelectItem v-for="(label, value) in typeOptions" :key="value" :value="value">
-                                        {{ label  }}
+                                    <SelectLabel>Products</SelectLabel>
+                                    <SelectItem v-for="product in products" :key="product.pr_code" :value="product.pr_code">
+                                        {{ product.pr_name  }}
                                     </SelectItem>
                                 </SelectGroup>
                             </SelectContent>
                         </Select>
-                        <div v-if="form.errors.type" class="text-red-500 text-sm">
-                            {{ form.errors.type }}
+                        <div v-if="form.errors.product" class="text-red-500 text-sm">
+                            {{ form.errors.product }}
                         </div>
                     </div>
                     <div class="flex flex-col justify-start align-center gap-3">
-                        <Label for="Icon">Icon (Lucide Icons)</Label>
-                        <Input id="Icon" v-model="form.icon" placeholder="Enter Icon here.."></Input>
-                        <div v-if="form.errors.icon" class="text-red-500 text-sm">
-                            {{ form.errors.icon }}
+                        <Label for="Type">Location</Label>
+                        <Select v-model="form.location">
+                            <SelectTrigger class="w-full">
+                                <SelectValue placeholder="Select brand" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectGroup>
+                                    <SelectLabel>Locations</SelectLabel>
+                                    <SelectItem v-for="location in locations" :key="location.loc_code" :value="location.loc_code">
+                                        {{ location.loc_name  }}
+                                    </SelectItem>
+                                </SelectGroup>
+                            </SelectContent>
+                        </Select>
+                        <div v-if="form.errors.location" class="text-red-500 text-sm">
+                            {{ form.errors.location }}
+                        </div>
+                    </div>
+                    <div class="flex flex-col justify-start align-center gap-3">
+                        <Label for="Icon">Quantity</Label>
+                        <Input id="Icon" v-model="form.quantity" placeholder="Enter Icon here.."></Input>
+                        <div v-if="form.errors.quantity" class="text-red-500 text-sm">
+                            {{ form.errors.quantity }}
+                        </div>
+                    </div>
+                    <div class="flex flex-col justify-start align-center gap-3">
+                        <Label for="Icon">Unit Cost</Label>
+                        <Input id="Icon" v-model="form.unit_cost" placeholder="Enter Icon here.."></Input>
+                        <div v-if="form.errors.unit_cost" class="text-red-500 text-sm">
+                            {{ form.errors.unit_cost }}
                         </div>
                     </div>
                     <Button type="submit" :disabled="form.processing" class="w-fit">
